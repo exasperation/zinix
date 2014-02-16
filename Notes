@@ -1,0 +1,21 @@
+Development notes/journal
+
+Architectural notes
+
+The initial target machine is the N8VEM SBC V2 with 512 KB of SRAM, some
+form of disk storage, a UART and a regular interrupt.
+
+The emulator has a 16550 UART at the SBC V2 IO ports, using the Altair
+HDSK which works on 128 byte sectors and a regular interrupt 10 times a
+second.
+
+The first page of memory 0000 - 00ff is reserved for the interrupt, reset
+and CP/M emulator code.
+
+ff00 - ffff is reserved for the HBIOS.
+
+The top 32 KB of memory from 8000 - ff00 is reserved for the OS.
+
+Applications have from 0100 - 7fff for their use.
+
+Booting uses RomWBW BIOS, but could be readily adapted to boot from CP/M.
