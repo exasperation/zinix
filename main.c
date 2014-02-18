@@ -1,10 +1,10 @@
 #include <stdint.h>
-#include <stdio.h>
 #include "debug.h"
+#include "bio.h"
+#include "bcache.h"
+
 
 // main.c
-
-uint8_t buf[512];
 
 void putchar(char c) {
 	__asm
@@ -27,5 +27,7 @@ char getchar() {
 }
 
 void main() {
-	hexdump(buf, sizeof(buf));
+	bcache_init();
+
+	panic("end of main!");
 }

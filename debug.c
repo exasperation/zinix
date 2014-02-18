@@ -1,4 +1,82 @@
-#include <stdio.h>
+#include "debug.h"
+
+void putchar(char c);
+char getchar();
+
+void _panic(char *s, char *fn, int ln) {
+	printf("%s: %s, line %d", s, fn, ln);
+	for (;;);
+}
+
+/* the following two functions are from xv6, a project of
+ * MIT and under the MIT licence. */
+
+void printint(int xx, int base, int sign) {
+  char digits[] = "0123456789abcdef";
+  char buf[16];
+  int i;
+  unsigned int x;
+
+  if(sign && (sign = xx < 0))
+    x = -xx;
+  else
+    x = xx;
+
+  i = 0;
+  do{
+    buf[i++] = digits[x % base];
+  }while((x /= base) != 0);
+
+  if(sign)
+    buf[i++] = '-';
+
+  while(--i >= 0)
+    putchar(buf[i]); 
+}
+
+// Print to the console. only understands %d, %x, %p, %s.
+void printf(char *fmt, ...) {
+  int i, c;
+  unsigned int *argp;
+  char *s;
+
+  if (fmt == 0)
+    panic("null fmt");
+
+  argp = (void*)(&fmt + 1);
+  for(i = 0; (c = fmt[i] & 0xff) != 0; i++){
+    if(c != '%'){
+      putchar(c);
+      continue;
+    }
+    c = fmt[++i] & 0xff;
+    if(c == 0)
+      break;
+    switch(c){
+    case 'd':
+      printint(*argp++, 10, 1);
+      break;
+    case 'x':
+    case 'p':
+      printint(*argp++, 16, 0);
+      break;
+    case 's':
+      if((s = (char*)*argp++) == 0)
+        s = "(null)";
+      for(; *s; s++)
+        putchar(*s);
+      break;
+    case '%':
+      putchar('%');
+      break;
+    default:
+      // Print unknown % sequence to draw attention.
+      putchar('%');
+      putchar(c);
+      break;
+    }
+  }
+}
 
 void hexdump (void *addr, int len) {
     int i;
