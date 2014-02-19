@@ -1,4 +1,4 @@
-all: sim/image
+all: image
 
 CFLAGS = -mz80 --no-std-crt0 -I./include
 
@@ -16,12 +16,12 @@ boot:
 	sdcc -mz80 --no-std-crt0 --code-loc 0 -o boot.ihx boot.rel
 	srec_cat boot.ihx -intel -o boot.bin -binary
 
-sim/image: boot kernel
-	dd if=/dev/zero of=image bs=1k count=1024
+image: boot kernel
+	dd if=/dev/random of=image bs=1k count=1024
 	dd if=boot.bin of=image conv=notrunc
 	dd if=main.bin of=image conv=notrunc bs=512 seek=3
 
-simh:
+simh: image
 	altairz80 simh.conf N8VEM_simh_z.rom
 
 clean:

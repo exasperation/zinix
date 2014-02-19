@@ -22,6 +22,7 @@ char getchar() {
 
 void _panic(char *s, char *fn, int ln) {
 	printf("PANIC -- %s -- %s, line %d", s, fn, ln);
+	__asm__("halt");
 	for (;;);
 }
 
@@ -110,11 +111,11 @@ void hexdump (void *addr, int len) {
                 printf ("  %s\n\r", buff);
 
             // Output the offset.
-            printf ("  %04x ", i);
+            printf ("  %x ", i);
         }
 
         // Now the hex code for the specific character.
-        printf (" %02x", pc[i]);
+        printf (" %x", pc[i]);
 
         // And store a printable ASCII character for later.
         if ((pc[i] < 0x20) || (pc[i] > 0x7e))
