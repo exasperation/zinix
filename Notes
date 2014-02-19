@@ -1,5 +1,7 @@
 Development notes/journal
 
+2014-02-15
+
 Architectural notes
 
 The initial target machine is the N8VEM SBC V2 with 512 KB of SRAM, some
@@ -19,3 +21,18 @@ The top 32 KB of memory from 8000 - ff00 is reserved for the OS.
 Applications have from 0100 - 7fff for their use.
 
 Booting uses RomWBW BIOS, but could be readily adapted to boot from CP/M.
+
+2014-02-18
+
+HBIOS is proving highly problematic with interrupt code, and I think I may
+have to delay the implementation of the interrupt/multitasking code until I
+can get my hands on a real SBC V2 with the Zilog Peripherals board with 
+proper vectored interrupts.  It may be better to write device drivers
+directly rather than relying on HBIOS as originally planned.  That's an
+unfortunate setback.
+
+Until then, I plan to get a "single-tasking" Unix-like system up and running,
+in particular with the file system and a robust TTY driver.
+
+Either way I should continue to learn about Z80 interrupts and SDCC's
+interaction with interrupt-driven code.
