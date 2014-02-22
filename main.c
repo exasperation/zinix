@@ -20,28 +20,14 @@ void reset() {
 extern zpage;
 
 void main() {
-	int x;
-
-
 	ticks = 0;
-	printf("%x\n\r", &zpage);
 
 	__asm
 		im 1
-	__endasm;
-
-	memcpy(0x0, &zpage, 128);
-
-	hexdump(&zpage, 128);
-	hexdump(0, 128);
-
-	__asm
 		ei
 	__endasm;
 
-	printf("ticks: %d", ticks);
-
-	for (;;);
+	memcpy(0x0, &zpage, 128);
 
 	panic("end of main!");
 }
