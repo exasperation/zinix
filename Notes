@@ -36,3 +36,9 @@ in particular with the file system and a robust TTY driver.
 
 Either way I should continue to learn about Z80 interrupts and SDCC's
 interaction with interrupt-driven code.
+
+ 2014-02-21
+
+ Major oversight, entry.s entrypoint was wrong, executing over the stack and
+ over the top of memory to eventually come to my code... interrupts were never
+ buggy!

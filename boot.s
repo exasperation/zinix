@@ -4,7 +4,7 @@
 
 start = 0x9000
 end = 0xff00
-entry = 0xc000
+entry = 0x9000
 
 sector_size = 512
 block_size  = 128

@@ -1,14 +1,17 @@
 #include "debug.h"
 
+__sfr __at 0x68 UART0;
+
 void putchar(char c) {
-	__asm
+	UART0 = c;
+/*	__asm
 		ld hl, #2
 		add hl, sp
 		ld e, (hl)
 		ld b, #01
 		ld c, #0
 		rst 08
-	__endasm;
+	__endasm; */
 }
 
 char getchar() {

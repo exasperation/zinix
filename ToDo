@@ -1,2 +1,9 @@
+Goal 1: load and execute binaries off disk with support for basic file
+and TTY IO, which means:
+	* file system
+	* tty driver
+	* binary format and loading binaries
+	* OS trap handling
+
 long term:
 	* use all free memory pages as disk cache, instead of just one page
