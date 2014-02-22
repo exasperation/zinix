@@ -5,6 +5,7 @@
 #include "bio.h"
 #include "bcache.h"
 #include <string.h>
+#include <stdio.h>
 
 long ticks;
 

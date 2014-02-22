@@ -5,6 +5,7 @@
 #include <string.h>
 #include "bcache.h"
 #include "debug.h"
+#include <stdio.h>
 
 // prototypes
 
