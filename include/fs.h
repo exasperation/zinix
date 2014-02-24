@@ -19,3 +19,10 @@ struct superblock {
 
 } super_block[N_SUPERS];
 
+struct inode {
+	uint8_t		mode;
+	uint16_t	nlinks;
+	uint16_t	uid;
+	uint16_t	gid;
+	uint32_t	size;
+	
