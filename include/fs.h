@@ -1,28 +1,40 @@
 #include <stdint.h>
 #include "types.h"
 
-#define BLOCKSIZE	1024
-
+#define BLOCKSIZE	512
 #define NR_SUPERS	4
 
 struct superblock {
 	uint16_t	magic;		// 0xdead
-	uint32_t	size;		// number of blocks
+	uint32_t	nblocks;	// number of blocks
 	uint32_t	ninodes;	// number of inodes
 	uint16_t	fs_version;	// version 1
 
+	uint32_t	mtime;		// last time FS was mounted
+	uint8_t		state;		// FS state, 1 = clean, 2 = dirty
+
 	/* following items are only in memory */
 
-	bool		rd_only;	// read only?
+	uint8_t		rd_only;	// read only?
 	dev_t		dev;		// what device?
-	
-
-} super_block[N_SUPERS];
+};
 
 struct inode {
-	uint8_t		mode;
-	uint16_t	nlinks;
+	uint8_t		type;
+	uint16_t	major;
+	uint16_t	minor;
+	uint16_t	nlink;
 	uint16_t	uid;
 	uint16_t	gid;
 	uint32_t	size;
-	
+
+	uint32_t	atime;
+	uint32_t	mtime;
+	uint32_t	ctime;
+
+	uint16_t	pad;
+
+	uint32_t	direct[];
+	uint32_t	indirect;
+	uint32_t	dbindirect;
+}
