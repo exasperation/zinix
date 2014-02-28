@@ -97,18 +97,18 @@ void bcache_relse(struct buf *b) {
 // Else if B_VALID is not set, read buf from disk, set B_VALID.
 void bcache_rw(struct buf *b) {
 	if(!(b->flags & B_BUSY))
-		panic("iderw: buf not busy");
+		panic("bcache_rw: buf not busy");
 	if((b->flags & (B_VALID|B_DIRTY)) == B_VALID)
-		panic("iderw: nothing to do");
+		panic("bcache_rw: nothing to do");
 
 	if(b->flags & B_DIRTY) {
-		// write here
-		b->flags &= ~B_BUSY;
+		bio_rw(BIO_WRITE, b->data, b->dev, b->block);
+		b->flags &= ~B_DIRTY;
 		b->flags |= B_VALID;
 	}
 
 	if (!(b->flags & B_VALID)) { 
-		bio_read(b->data, b->dev, b->block);
+		bio_rw(BIO_READ, b->data, b->dev, b->block);
 		b->flags |= B_VALID;
 	}
 }

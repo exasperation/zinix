@@ -11,6 +11,10 @@ struct superblock {
 	uint16_t	fs_version;	// version 1
 
 	uint32_t	mtime;		// last time FS was mounted
+	uint32_t	ctime;		// time allowed since last check
+	uint32_t	mcount;		// times mounted since last check
+	uint32_t	mmax;		// maximum times to be mounted before
+							// check is forced
 	uint8_t		state;		// FS state, 1 = clean, 2 = dirty
 
 	/* following items are only in memory */
