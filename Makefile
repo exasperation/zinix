@@ -29,4 +29,4 @@ simh: image
 	altairz80 simh.conf N8VEM_simh_z.rom
 
 clean:
-	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image
+	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image fsimage

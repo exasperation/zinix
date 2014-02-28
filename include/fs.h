@@ -9,12 +9,17 @@ struct superblock {
 	uint16_t	fs_version;	// version 1
 
 
-	uint32_t	nblocks;	// number of blocks
+	uint32_t	nblocks;	// total number of blocks
 	uint32_t	ninodes;	// number of inodes
 
-	uint32_t	mcount;		// times mounted since last check
-	uint32_t	mmax;		// maximum times to be mounted before
+	uint16_t	mcount;		// times mounted since last check
+	uint16_t	mmax;		// maximum times to be mounted before
 							// check is forced
+	uint32_t	fimap;		// first block of free inode map
+	uint32_t	fbmap;		// first block of free data block map
+	uint32_t	inode;		// first block of inode structure
+	uint32_t	dblock;		// first data block
+
 	uint8_t		state;		// FS state, 1 = clean, 2 = dirty
 
 	/* following items are only in memory */
