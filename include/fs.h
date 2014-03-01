@@ -15,9 +15,9 @@ struct superblock {
 	uint16_t	mcount;		// times mounted since last check
 	uint16_t	mmax;		// maximum times to be mounted before
 							// check is forced
-	uint32_t	fimap;		// first block of free inode map
-	uint32_t	fbmap;		// first block of free data block map
-	uint32_t	inode;		// first block of inode structure
+	uint32_t	imap;		// first block of free inode map
+	uint32_t	itable;		// first block of inode table
+	uint32_t	dmap;		// first block of free data block map
 	uint32_t	dblock;		// first data block
 
 	uint8_t		state;		// FS state, 1 = clean, 2 = dirty
