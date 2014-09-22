@@ -47,6 +47,6 @@ struct inode {
 
 	uint32_t	direct[6];
 	uint32_t	indirect;
-	uint32_t	dbindirect;
-	uint32_t	triplyindirect;
+	uint32_t	double_indirect;	
+	uint32_t	triple_indirect;
 }

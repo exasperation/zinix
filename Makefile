@@ -21,12 +21,12 @@ boot:
 	srec_cat boot.ihx -intel -o boot.bin -binary
 
 image: boot kernel
-	dd if=/dev/random of=image bs=1k count=1024
+	dd if=/dev/urandom of=image bs=1k count=1024
 	dd if=boot.bin of=image conv=notrunc
 	dd if=main.bin of=image conv=notrunc bs=512 seek=3
 
 simh: image
-	altairz80 simh.conf N8VEM_simh_z.rom
+	simh-altairz80 simh.conf N8VEM_simh_z.rom
 
 clean:
 	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image fsimage
