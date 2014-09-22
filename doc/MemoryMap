@@ -1,0 +1,8 @@
+PAGE 0
+0000    interrupts, etc.
+0100    user process start... 
+
+HIGHMEM
+
+8000    kernel entry and text
+ffff    base of kernel stack

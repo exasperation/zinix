@@ -1,6 +1,6 @@
 #include "types.h"
 
-#define NBUF	25
+#define NBUF    10
 
 void bcache_init();
 struct buf* bcache_read(dev_t dev, uint32_t block);

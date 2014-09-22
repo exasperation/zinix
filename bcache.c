@@ -5,7 +5,7 @@
 #include "debug.h"
 #include "bio.h"
 
-__at 0x100 struct {
+__at 0x4000 struct {
   struct buf buf[NBUF];
 
   // Linked list of all buffers, through prev/next.
@@ -102,13 +102,13 @@ void bcache_rw(struct buf *b) {
 		panic("bcache_rw: nothing to do");
 
 	if(b->flags & B_DIRTY) {
-		bio_rw(BIO_WRITE, b->data, b->dev, b->block);
+		bio_rw(b->data, b->dev, BIO_WRITE, b->block);
 		b->flags &= ~B_DIRTY;
 		b->flags |= B_VALID;
 	}
 
 	if (!(b->flags & B_VALID)) { 
-		bio_rw(BIO_READ, b->data, b->dev, b->block);
+		bio_rw(b->data, b->dev, BIO_READ, b->block);
 		b->flags |= B_VALID;
 	}
 }

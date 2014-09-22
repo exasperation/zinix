@@ -6,8 +6,8 @@
 init:
 	;; disable interrupts until we're ready to enable them after main() has run
 	di
-	;; Set stack pointer directly above top of memory.
-	ld	sp,#0xff00
+	;; Set stack pointer at top of memory
+	ld	sp,#0xffff
 
 	call	_main
 

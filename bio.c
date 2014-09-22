@@ -6,6 +6,7 @@
 #include "bcache.h"
 #include "debug.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 #define SEC_PER_TRACK 256
 
@@ -17,7 +18,11 @@ void simh_hdsk_reset() {
 		HDSK = 0x1; // reset
 }
 
-void bio_rw(char op, char *buf, dev_t d, long block) {
+void bio_rw (char *buf, dev_t d, char op, long block) {
+   simh_bio_rw(buf, d, op, block);
+}
+
+void simh_bio_rw(char *buf, dev_t d, char op, long block) {
 	uint16_t track;
 	uint8_t sector;
 
@@ -27,8 +32,7 @@ void bio_rw(char op, char *buf, dev_t d, long block) {
 	switch (op) {
 		case BIO_READ:	HDSK = 0x2; break;
 		case BIO_WRITE:	HDSK = 0x3; break;
-		default:	panic("bio - invalid op");
-	}
+	} // potential to fall through here, bool?
 
 	HDSK = 0x0;		// hdsk 0
 	HDSK = sector;	// sector 
