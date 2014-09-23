@@ -42,3 +42,14 @@ interaction with interrupt-driven code.
  Major oversight, entry.s entrypoint was wrong, executing over the stack and
  over the top of memory to eventually come to my code... interrupts were never
  buggy!
+
+2014-09-22
+
+Some architectural decisions.  HBIOS/WBWBIOS are amazing projects, but
+overlap with the goal of a Unix-like OS on the N8VEM considerably.  They're
+basically operating systems in their own right.  I intend to write device
+drivers directly.  WBW source code should prove a useful starting point for
+the various devices.  Still waiting on real hardware before I can really get
+started on development.
+
+Current tasks are userspace traps and filesystem.

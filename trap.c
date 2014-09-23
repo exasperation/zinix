@@ -1,9 +1,11 @@
 #include <string.h>
+#include <stdio.h>
 #include "debug.h"
+#include "uart.h"
 
 long ticks;
 
-void isr() {
+void isr0x38() {
 	ticks++;
 }
 
@@ -21,4 +23,3 @@ void enable_intr() {
 		ei
 	__endasm;
 }
-

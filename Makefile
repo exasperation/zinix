@@ -10,9 +10,10 @@ kernel:
 	sdcc $(CFLAGS) -c bio.c
 #	sdcc $(CFLAGS) -c bcache.c
 	sdcc $(CFLAGS) -c trap.c
-	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0x8000 -o main.ihx \
+	sdcc $(CFLAGS) -c uart.c
+	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o main.ihx \
 		entry.rel main.rel debug.rel bio.rel zpage.rel \
-		trap.rel
+		uart.rel trap.rel
 	srec_cat main.ihx -intel -offset -0x9000 -o main.bin -binary
 
 boot:

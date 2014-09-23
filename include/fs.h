@@ -3,6 +3,7 @@
 
 #define BLOCKSIZE	512
 #define NR_SUPERS	4
+#define SB_MAGIC    0xDEAD
 
 struct superblock {
 	uint16_t	magic;		// 0xdead
@@ -27,6 +28,8 @@ struct superblock {
 	uint8_t		rd_only;	// read only?
 	dev_t		dev;		// what device?
 };
+
+// 64 bytes, 8 inodes per superblock
 
 struct inode {
 	uint16_t	mode;

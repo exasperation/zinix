@@ -1,6 +1,6 @@
 .module zpage
 
-.globl	_isr
+.globl	_isr0x38
 .globl	_reset
 
 .area	_CODE (REL)
@@ -44,6 +44,6 @@ _zpage:
 	.db 0
 	.db 0
 ; rst 0x38
-	call _isr
+	call _isr0x38
 	ei
 	ret
