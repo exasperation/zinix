@@ -52,4 +52,4 @@ struct inode {
 	uint32_t	indirect;
 	uint32_t	double_indirect;	
 	uint32_t	triple_indirect;
-}
+};

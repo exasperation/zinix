@@ -1,0 +1,25 @@
+I have copied relatively little code directly (parts of SDCC
+and xv6 are used in this software) but during the process of learning I have
+read the code and studied the architectures of various systems.  I have borrowed
+some ideas quite closely.  I cannot take credit for inventing Unix, or C, or for
+writing the compiler that compiles this code, nor for writing the simulators and 
+libraries.
+
+Some particularly memorable examples:
+
+* UZI / UZI180 / UZI280 / UZIX - an entire family of ports, all in fairly archaic C, for the Aztec C compiler
+                            which are derived from UZI, the original which ran on plain Z80 systems
+
+* xv6 - An MIT teaching operating system based on v6 Unix, ported to x86 with features like smp
+
+* early versions of Unix: v5, v6, v7
+
+* 4.x BSD family
+
+* Minix, 1.x, 2.x
+
+* SDCC's library - efficient z80 string ops
+
+* WBWROM - without having well-documented assembly code for how to drive many of the peripherals, I'd be lost
+
+

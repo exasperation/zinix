@@ -5,6 +5,7 @@
 #include "bio.h"
 #include "trap.h"
 #include "uart.h"
+#include "fs.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -15,6 +16,6 @@ void main() {
 	printf("starting...\n\r");
 	enable_intr();
 	simh_hdsk_reset();
-
+    fs_init();
 	panic("end of main!");
 }
