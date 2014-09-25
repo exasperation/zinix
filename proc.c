@@ -1,2 +1,6 @@
 
-fork 
+fork ();
+
+init ();
+
+

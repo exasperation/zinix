@@ -1,6 +1,6 @@
 all: image
 
-CFLAGS = -mz80 --no-std-crt0 -I./include 
+CFLAGS = -mz80 --no-std-crt0 
 
 kernel:
 	sdasz80 -o entry.s
@@ -10,11 +10,11 @@ kernel:
 	sdcc $(CFLAGS) -c bio.c
 #	sdcc $(CFLAGS) -c bcache.c
 	sdcc $(CFLAGS) -c trap.c
-	sdcc $(CFLAGS) -c uart.c
+	sdcc $(CFLAGS) -c sr.c
 	sdcc $(CFLAGS) -c fs.c
 	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o main.ihx \
 		entry.rel main.rel debug.rel bio.rel zpage.rel \
-		uart.rel trap.rel fs.rel
+		sr.rel trap.rel fs.rel
 	srec_cat main.ihx -intel -offset -0x9000 -o main.bin -binary
 
 boot:
@@ -23,7 +23,7 @@ boot:
 	srec_cat boot.ihx -intel -o boot.bin -binary
 
 image: boot kernel
-	dd if=/dev/urandom of=image bs=1k count=1024
+	dd if=/dev/zero of=image bs=1k count=1024
 	dd if=boot.bin of=image conv=notrunc
 	dd if=main.bin of=image conv=notrunc bs=512 seek=3
 

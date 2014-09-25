@@ -2,8 +2,13 @@
 #include "fs.h"
 #include "bio.h"
 #include "debug.h"
+#include "types.h"
 
 struct superblock sb;
+
+char mkfs(dev_t d, uint32_t sz, uint32_t ino) { 
+
+}
 
 unsigned char b[512];
 
