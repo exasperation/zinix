@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "debug.h"
-#include "uart.h"
+#include "sr.h"
 
 long ticks;
 

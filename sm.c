@@ -5,21 +5,23 @@
 #include <string.h>
 #include "bcache.h"
 #include "debug.h"
-#include <stdio.h>
-#include <stdbool.h>
 
 #define SEC_PER_TRACK 256
 
 __sfr __at 0xfd HDSK;
 
-void simh_hdsk_reset() {
+int sm_open() {
 	char x;
 	for(x = 0; x < 32; x++)
 		HDSK = 0x1; // reset
+    return 0;
 }
 
-void bio_rw (char *buf, dev_t d, char op, long block) {
-   simh_bio_rw(buf, d, op, block);
+int sm_read(dev_t d, char *b, long off, int n) {
+
+}
+
+int sm_write(dev_t d, char *b, long off, int n) {
 }
 
 void simh_bio_rw(char *buf, dev_t d, char op, long block) {

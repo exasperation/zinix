@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 #include "debug.h"
-#include "bio.h"
+#include "sm.h"
 #include "trap.h"
-#include "uart.h"
+#include "sr.h"
 #include "fs.h"
 #include <string.h>
 #include <stdio.h>
