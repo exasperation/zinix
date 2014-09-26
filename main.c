@@ -2,10 +2,8 @@
 
 #include <stdint.h>
 #include "debug.h"
-#include "sm.h"
 #include "trap.h"
-#include "sr.h"
-#include "fs.h"
+#include "dev.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -15,7 +13,6 @@ void main() {
     int i;
 	printf("starting...\n\r");
 	enable_intr();
-	simh_hdsk_reset();
-    fs_init();
+	//simh_hdsk_reset();
 	panic("end of main!");
 }

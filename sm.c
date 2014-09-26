@@ -1,12 +1,13 @@
 /* bio.c - block IO hardware */
 
 #include "types.h"
-#include "bio.h"
 #include <string.h>
-#include "bcache.h"
 #include "debug.h"
 
 #define SEC_PER_TRACK 256
+
+#define BIO_READ    0
+#define BIO_WRITE   1
 
 __sfr __at 0xfd HDSK;
 
