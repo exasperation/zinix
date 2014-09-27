@@ -14,5 +14,6 @@ void main() {
 	printf("starting...\n\r");
 	enable_intr();
 	//simh_hdsk_reset();
+    for(;;);
 	panic("end of main!");
 }

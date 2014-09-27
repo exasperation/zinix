@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "types.h"
 
-#define BLOCKSIZE	512
+#define BLOCKSIZE	1024
 #define NR_SUPERS	4
 #define SB_MAGIC    0xDEAD
 
@@ -29,7 +29,7 @@ struct superblock {
 	dev_t		dev;		// what device?
 };
 
-// 64 bytes, 8 inodes per superblock
+// 64 bytes, 16 inodes per block
 
 struct inode {
 	uint16_t	mode;

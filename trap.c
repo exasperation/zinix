@@ -4,12 +4,8 @@
 
 long ticks;
 
-void isr0x38() {
-	ticks++;
-}
-
-void reset() {
-	panic("reset");
+void isr() {
+    printf("x");
 }
 
 extern zpage;
