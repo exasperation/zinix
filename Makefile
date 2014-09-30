@@ -13,9 +13,10 @@ kernel:
 	sdcc $(CFLAGS) -c trap.c
 	sdcc $(CFLAGS) -c sr.c
 	sdcc $(CFLAGS) -c fs.c
+	sdcc $(CFLAGS) -c mm.c
 	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o main.ihx \
 		entry.rel isr.rel main.rel debug.rel sm.rel zpage.rel \
-		sr.rel trap.rel fs.rel
+		sr.rel trap.rel fs.rel mm.rel
 	srec_cat main.ihx -intel -offset -0x9000 -o main.bin -binary
 
 boot:

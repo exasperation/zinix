@@ -1,0 +1,236 @@
+(Written by Andrew Lynch, original at http://n8vem-sbc.pbworks.com/w/file/31805111/MPCL_V2.txt)
+
+N8VEM Memory Page Configuration Latched (MPCL) - Classic (Jumpers K10 1-2 and K11 1-2)
+
+The original N8VM SBC and the N8VEM SBC V2 (with jumpers K10 1-2 and K11 1-2) provides a 32K 
+window into the RAM chip that is mapped into the lower 32K of the Z80's address space.  This 
+allows access to all the locations the memory chip.  It has been used as a way to build a 
+memory disk by selectively copying blocks of data in and out of the windows.  It does mean 
+that lower 32K not static and that must be considered when
+thinking about how to handle interrupts.
+
+Additionally, there is an additional latch (MPCL_ROM 7CH) that allows a similar windowing of 
+the ROM into the lower 32K.
+
+Both latches can be set independently of each other, but only the ROM or the RAM can be winded 
+at any moment.  This is handled by bit 7 on the MPCL_ROM latch.   If it is set to 1, than RAM 
+is selected for the window.  If it is set to 0, the ROM window is selected.
+On reset, the latches default to a setting of all 0s.  This means that the lower 32K of the 
+ROM is selected and that the lower 32K of the ram chip is selected in the ram latch, but not 
+enabled since the bit 7 of the MPCL_ROM
+
+The latches can NOT be read.  Read access to the two ports will likely result in undesirable 
+results.
+
+Additionally, there is hardware that forces all Z80 ram access in 0800H-FFFFH to be forced 
+into the upper 32K of the memory chip.  This allows code to execute in the upper 32K without 
+the fear that the latch will map memory out from under it.  However, it is possible to have 
+the upper 32K of the memory chip to be mapped into the lower window at the same time you are 
+executing out of the upper 32k.  Beware!!!
+
+Any routine that manipulate the MPCL_RAM and MPCL_ROM latches should live in the upper 32K of 
+the Z80 address space when in classic mode
+
+A 512KB memory chip gives us sixteen (16) 32K windows that can be mapped.  The upper 32K of 
+15th bank has the upper 32K as common.
+
+      -------   -------   -------   -------   -------   -------   -------   -------
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   | Com |
+ 32K  |  1  |   |  3  |   |  5  |   |  7  |   |  9  |   | 11  |   |  13 |   | mon |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      -------   -------   -------   -------   -------   -------   -------   -------
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+ 32K  |  0  |   |  2  |   |  4  |   |  6  |   |  8  |   | 10  |   | 12  |   | 14  |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      -------   -------   -------   -------   -------   -------   -------   -------
+
+    
+Window   0         1         2         3     ..    12         13        14        15
+
+CFG_Q0   0         0         0         0            0         1          0         1
+CFG_Q1   0         1         0         1            0         0          1         1
+CFG_Q2   0         0         1         1            1         1          1         1
+CFG_Q3   0         0         0         0            1         1          1         1
+
+
+
+; RAM MEMORY PAGE CONFIGURATION LATCH IS DECODED TO 78H
+;
+MPCL_RAM            EQU   78H             ; RAM CONTROL PORT, SHOULD ONLY BE CHANGED WHILE
+;                                         IN UPPER MEMORY PAGE 08000h-$FFFF OR LIKELY
+;                                         LOSS OF CPU MEMORY CONTEXT 
+;
+;       7 6 5 4  3 2 1 0      ONLY APPLICABLE TO THE LOWER MEMORY PAGE 00000h-$7FFF
+;       ^ ^ ^ ^  ^ ^ ^ ^
+;       : : : :  : : : :--0 = A15 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : : :----0 = A16 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : :------0 = A17 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :  :--------0 = A18 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :-----------0 = 
+;       : : :-------------0 = 
+;       : :---------------0 = 
+;       :-----------------0 = 
+;
+;
+MPCL_ROM            EQU   7CH             ; ROM CONTROL PORT, SHOULD ONLY BE CHANGED WHILE
+;                                         IN UPPER MEMORY PAGE 08000h-$FFFF OR LIKELY
+;                                         LOSS OF CPU MEMORY CONTEXT 
+;
+;       7 6 5 4  3 2 1 0      ONLY APPLICABLE TO THE LOWER MEMORY PAGE 00000h-$7FFF
+;       ^ ^ ^ ^  ^ ^ ^ ^
+;       : : : :  : : : :--0 = A15 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : : :----0 = A16 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : :------0 = A17 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  :--------0 = A18 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :-----------0 = A19 ROM ADDRESS LINE DEFAULT IS 0
+;       : : :-------------0 = 
+;       : :---------------0 = 
+;       :-----------------0 = ROM SELECT (0=ROM, 1=RAM) DEFAULT IS 0 after a Reset
+;
+ 
+===============================================================================================
+
+N8VEM Memory Page Configuration Latched (MPCL) - Alternate  (Jumpers K11 2-3 and K10 2-3)
+
+
+
+The N8VEM SCB V2 has jumpers that provides a different MPCL operation.  With jumpers (K11 2-3 
+and K10 2-3) two changes take place.
+First, hardware now maps Z80 bus access for the upper 16K of address space into the high 16K 
+of the memory chip (as opposed to 32K).
+Second, the RAM windowing now occurs in 64K chunks. (bit 0 of the RAM_MPCL is no longer valid)
+
+Because the upper 16K of the 64K windows are remapped, the 64K chunks act like selectable 48K 
+banks with a 16K common bank that is always accessible to the Z80. This is well suited for use 
+with CP/M 3 and MP/M 2 to be run in "banked" mode with a 48K/16K split for banked/common 
+memory.
+
+
+The N8VEM SBC V2 MPCL alternate jumper settings results in almost 1/4 of the memory chip as 
+not accessible (NA), but the 48K/16K allows MP/M and CP/M 3 to be configured for "banked mode" 
+operations with large TPAs.  The classic jumper settings allows access to all the memory. but 
+operates as a 32K/32K banked/common.
+
+The ROM windowing works the same as described above - 32K chunks of the ROM are mapped into 
+the lower 32K of the Z80s address space by setting the MPCL_ROM latch.
+
+
+A 512KB memory chip gives us eight (8) 64K windows that can be mapped.  The upper 16K of the 
+first 7 banks are inaccessible and the 8th bank has the upper 16K as common.
+
+
+
+      -------   -------   -------   -------   -------   -------   -------   -------
+      |  NA |   | NA  |   | NA  |   | NA  |   | NA  |   | NA  |   | NA  |   | Com |
+ 16K  |     |   |     |   |     |   |     |   |     |   |     |   |     |   | mon |
+      -------   -------   -------   -------   -------   -------   -------   -------
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+ 48K  |  0  |   |  1  |   |  2  |   |  3  |   |  4  |   |  5  |   |  6  |   |  7  |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      |     |   |     |   |     |   |     |   |     |   |     |   |     |   |     |
+      -------   -------   -------   -------   -------   -------   -------   -------
+
+Window   0         1         2         3         4         5         6         7
+
+CFG_Q0   0         0         0         0         0         0         0         0
+CFG_Q1   0         1         0         1         0         1         0         1
+CFG_Q2   0         0         1         1         0         0         1         1
+CFG_Q3   0         0         0         0         1         1         1         1
+
+
+
+; MEMORY PAGE CONFIGURATION LATCH IS DECODED TO 78H
+;
+MPCL_RAM            EQU   78H             ; RAM CONTROL PORT, SHOULD ONLY BE CHANGED WHILE
+;                                         IN UPPER MEMORY PAGE 0C000h-$FFFF OR LIKELY
+;                                         LOSS OF CPU MEMORY CONTEXT 
+;
+;       7 6 5 4  3 2 1 0      APPLICABLE TO THE 00000h-$BFFF (C000h-FFFFH is common)
+;       ^ ^ ^ ^  ^ ^ ^ ^
+;       : : : :  : : : :--0 =  No longer used
+;       : : : :  : : :----0 = A16 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : :------0 = A17 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :  :--------0 = A18 RAM ADDRESS LINE DEFAULT IS 0
+;       : : : :-----------0 = 
+;       : : :-------------0 = 
+;       : :---------------0 = 
+;       :-----------------0 = 
+;
+;
+MPCL_ROM            EQU   7CH             ; ROM CONTROL PORT, SHOULD ONLY BE CHANGED WHILE
+;                                         IN UPPER MEMORY PAGE 0C000h-$FFFF OR LIKELY
+;                                         LOSS OF CPU MEMORY CONTEXT 
+;
+; ROM MEMORY PAGE CONFIGURATION LATCH CONTROL PORT 7CH
+;
+;       7 6 5 4  3 2 1 0      ONLY APPLICABLE TO THE LOWER MEMORY PAGE 00000h-$7FFF
+;       ^ ^ ^ ^  ^ ^ ^ ^
+;       : : : :  : : : :--0 = A15 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : : :----0 = A16 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  : :------0 = A17 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :  :--------0 = A18 ROM ADDRESS LINE DEFAULT IS 0
+;       : : : :-----------0 = A19 ROM ADDRESS LINE DEFAULT IS 0
+;       : : :-------------0 = 
+;       : :---------------0 = 
+;       :-----------------0 = ROM SELECT (0=ROM, 1=RAM) DEFAULT IS 0 after a Reset
+;
+
+
+
+===============================================================================================
+
+MPCL Usage
+
+The standard N8VEM bootrom uses extra memory as a ram disk.  64K is allocated for the z80 to 
+run programs and the rest is used as a ram disk.  
+
+RAM disk operation is done by treating 128 byte chunks of memory as disk sectors.  A disk 
+parameter block is built with parameters that size it to be the extra ram.
+
+A routine in the bios translates sector and track numbers into a 32K window and offset in RAM.
+The MPCL_RAM latches are set to bring that memory window into the lower 32K window.
+It copies the data in/out of the lower 32K memory into a sector buffer that is in the "common" 
+area in the upper 32K window.
+The MPCL_RAM latch are set back to its original value so that the lower 32K is back to the 
+original window that has code.
+The BIOS then copies the sector the the desired "DMA" address.
+In MPCL Classic mode, all copy and mapping routines must execute from the upper 32K window of 
+RAM.
+
+
+Max Scene took the next step to reserve a bit more of the ram for CP/M 3.0 and implemented a 
+32K/32K banked/common configuration.  This works well for CP/M 3.0 and should allow MP/M 2.0 
+to run.  The rest of the ram is still used as a ram disk. New bootroms were created to reflect 
+the changes in the ram disk.
+
+MP/M, which allows multiple programs to be concurrently running, is best suited to a machine 
+where the banked memory size is larger. This allows more space for bigger programs to be run.  
+A 48K/16K model, with more than two banks for TPAs works well.
+
+
+The N8VEM SBC V2 MPCL Alternate mode provides a 48K/16K model with up to 8 banks. All eight 
+banks can be used by the OS or as in the classic mode, a few banks could be used by the OS and 
+the rest can be used as a RAM disk. RAM disk mapping becomes more complicated and the 
+available ram disk space is smaller due to the inaccessible areas of the RAM chip.
+
+In MPCL Alternate mode, manipulation of the MPCL_RAM and MPCL_ROM latches must execute from 
+the upper 16K of the Z80 address space (the common bank).  The stack should also live in the 
+common space
+
+
+Note: The upper 16K inaccessibility was an understood tradeoff. Unfortunately, extra gates 
+were not available to preserve the function of bit 0 of the MPCL_RAM.  This would have 
+maintained a 32K window for mapping the ram chip yet still allow a 48K/16K split. SBC V3??
+
+===============================================================================================
+
+MPCL Impacts on Booting
+
+ROM access is the same in both Classic and Alternate MPCL modes.  The only change for ROM 
+access is that that access to the MPCL_ROM and MPCL_RAM I/O ports should only be done from the 
+upper 16K of the z80 address space (C000H - FFFFH).  This shouldn't impact CP/M or MP/M since 
+the BIOS should live in upper memory.
