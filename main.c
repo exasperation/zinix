@@ -13,8 +13,8 @@ char buf[512];
 void main()
 {
 	printf("starting...\n\r");
-    swapbank(RAMBANK, 15);
-    hexdump(0x1000, 0x100);
+    enable_intr();
 
+    brk();
 	panic("end of main!");
 }

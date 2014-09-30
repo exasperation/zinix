@@ -10,6 +10,7 @@
 .globl  _rst38
 
 _rst00:
+        ret
 _rst08:
 _rst10:
 _rst18:
