@@ -15,20 +15,15 @@ __sfr __at MPCL_ROM mpcl_rom;
  */
 void swapbank(signed char bank)
 {
-    unsigned char ob;
     if (bank < 0)
     {
         bank++;
-        ob = abs(bank) & 0x7f;
-        mpcl_ram = ob;
-        mpcl_rom = ob; // ram bit 7 low with this mask
-        printf("B: ROM - %x\n\r", ob);
+        mpcl_ram = abs(bank) & 0x7f;
+        mpcl_rom = abs(bank) & 0x7f; // ram bit 7 low with this mask
     } else
     {
-        ob = (bank | 0x80);
-        mpcl_rom = ob;
-        mpcl_ram = ob;   // ram bit high
-        printf("B: RAM - %x\n\r", ob);
+        mpcl_rom = (bank | 0x80);
+        mpcl_ram = (bank | 0x80);   // ram bit high
     }
 }
 #define BCSZ    256
