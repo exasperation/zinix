@@ -11,7 +11,7 @@ struct superblock {
 
 
 	uint32_t	nblocks;	// total number of blocks
-	uint32_t	ninodes;	// number of inodes
+	ino_t   	ninodes;	// number of inodes
 
 	uint16_t	mcount;		// times mounted since last check
 	uint16_t	mmax;		// maximum times to be mounted before
@@ -32,15 +32,15 @@ struct superblock {
 // 64 bytes, 16 inodes per block
 
 struct inode {
-	uint16_t	mode;
+    mode_t  	mode;
 	
 	uint16_t	nlinks;
 
 	uint16_t	major;
 	uint16_t	minor;
 	
-	uint16_t	uid;
-	uint16_t	gid;
+	uid_t   	uid;
+	gid_t   	gid;
 	
 	uint32_t	size;
 

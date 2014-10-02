@@ -5,7 +5,6 @@
 long ticks;
 
 void isr() {
-    printf("x");
 }
 
 extern zpage;

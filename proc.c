@@ -1,6 +1,11 @@
 
-fork ();
+mesgcpy(src, sptr, dst, dptr)
+{
+}
 
-init ();
 
+void init ()
+{
+    
+}
 

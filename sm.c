@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include <string.h>
+#include <stdio.h>
 #include "debug.h"
 
 #define SEC_PER_TRACK 256
@@ -9,23 +10,19 @@
 #define BIO_READ    0
 #define BIO_WRITE   1
 
+#define BLOCKSIZE 512
+
 __sfr __at 0xfd HDSK;
 
-int sm_open() {
+int sm_open(dev_t d) 
+{
 	char x;
 	for(x = 0; x < 32; x++)
 		HDSK = 0x1; // reset
     return 0;
 }
 
-int sm_read(dev_t d, char *b, long off, int n) {
-
-}
-
-int sm_write(dev_t d, char *b, long off, int n) {
-}
-
-void simh_bio_rw(char *buf, dev_t d, char op, long block) {
+void simh_bio_rw(char *buf, char op, long block) {
 	uint16_t track;
 	uint8_t sector;
 
@@ -44,4 +41,15 @@ void simh_bio_rw(char *buf, dev_t d, char op, long block) {
 	HDSK = (uint8_t) buf;
 	HDSK = (uint8_t)((uint16_t)buf >> 8);	// dma
 	sector = HDSK;
+}
+
+
+int sm_read(dev_t d, char *b, long blk)
+{ 
+    simh_bio_rw(b, BIO_READ, blk);
+}
+
+int sm_write(dev_t d, char *b, long blk)
+{
+
 }

@@ -14,9 +14,10 @@ kernel:
 	sdcc $(CFLAGS) -c sr.c
 	sdcc $(CFLAGS) -c fs.c
 	sdcc $(CFLAGS) -c mm.c
+	sdcc $(CFLAGS) -c dev.c
 	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o main.ihx \
 		entry.rel isr.rel main.rel debug.rel sm.rel zpage.rel \
-		sr.rel trap.rel fs.rel mm.rel
+		sr.rel trap.rel fs.rel mm.rel dev.rel
 	srec_cat main.ihx -intel -offset -0x9000 -o main.bin -binary
 
 boot:
@@ -28,6 +29,7 @@ image: boot kernel
 	dd if=/dev/zero of=image bs=1k count=1024
 	dd if=boot.bin of=image conv=notrunc
 	dd if=main.bin of=image conv=notrunc bs=512 seek=3
+	dd if=README.md of=image conv=notrunc bs=1024 seek=64
 
 simh: image
 	simh-altairz80 simh.conf N8VEM_simh_z.rom
