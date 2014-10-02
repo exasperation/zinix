@@ -7,20 +7,18 @@
 #include "mm.h"
 #include <string.h>
 #include <stdio.h>
-
-char b2[512];
+#include "mesg.h"
 
 void main()
 {
-    int i;
 	printf("starting...\n\r");
     enable_intr();
-    __asm__("di");
+    
 
-    swapbank(RAM_A);
-    hexdump(0, 0x100);
-    bankcpy(RAM_A, 10, ROM_2, 0, 0x4000);
-    hexdump(0, 0x100);
+    __asm
+        ld hl,#0x1234
+        rst 0x30
+    __endasm;
 
     panic("end of main!");
 }

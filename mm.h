@@ -29,6 +29,7 @@
 #define     RAM_B    11
 #define     RAM_C    12
 #define     RAM_D    13
+#define     RAM_E    14
 
 void swapbank(signed char bank);
 void bankcpy(char dbank, int dst, char sbank, int src, int cnt);

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "debug.h"
 #include "conf.h"
+#include "z80.h"
 
 __sfr __at MPCL_RAM mpcl_ram;
 __sfr __at MPCL_ROM mpcl_rom;
@@ -32,12 +33,16 @@ char bcbuf[BCSZ];
 
 void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
 {
+    di();
     while (cnt > 0) 
     {
         swapbank(sbank);
         memcpy(&bcbuf, src, (cnt > BCSZ ? BCSZ : cnt));
         swapbank(dbank);
         memcpy(dst, &bcbuf, (cnt > BCSZ ? BCSZ : cnt));
+        dst += (cnt > BCSZ ? BCSZ : cnt);
+        src += (cnt > BCSZ ? BCSZ : cnt);
         cnt -= BCSZ;
-    } 
+    }
+    ei();
 }
