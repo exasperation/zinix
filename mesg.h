@@ -1,7 +1,7 @@
 typedef struct
 {
-    int m_target;
-    int m_source;
+    char src;
+    char dst;
 
     int mi1;
     int mi2;

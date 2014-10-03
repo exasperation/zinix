@@ -53,3 +53,11 @@ the various devices.  Still waiting on real hardware before I can really get
 started on development.
 
 Current tasks are userspace traps and filesystem.
+
+2014-10-03
+
+messages.  true microkernel-ish.
+
+current design is for kernel to handle raw memory management, mm, procesess and little more.
+
+        may end up including drivers on "threads" here
