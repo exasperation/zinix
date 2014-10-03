@@ -1,4 +1,4 @@
-all: image
+all: image romimage
 
 CFLAGS = -mz80 --no-std-crt0 
 
@@ -25,14 +25,19 @@ boot:
 	sdcc -mz80 --no-std-crt0 --code-loc 0 -o boot.ihx boot.rel
 	srec_cat boot.ihx -intel -o boot.bin -binary
 
+romimage: 
+	dd if=/dev/zero of=romimage bs=1k count=512
+	dd if=romwbw64k.rom of=romimage conv=notrunc
+	dd if=README.md bs=1 seek=64k of=romimage conv=notrunc
+
 image: boot kernel
 	dd if=/dev/zero of=image bs=1k count=1024
 	dd if=boot.bin of=image conv=notrunc
 	dd if=main.bin of=image conv=notrunc bs=512 seek=3
-	dd if=README.md of=image conv=notrunc bs=1024 seek=64
 
-simh: image
-	simh-altairz80 simh.conf N8VEM_simh_z.rom
+simh: image romimage
+	simh-altairz80 simh.conf 
 
 clean:
-	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image fsimage
+	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image \
+	   	fsimage romimage

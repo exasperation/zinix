@@ -19,10 +19,11 @@ void swapbank(signed char bank)
     if (bank < 0)
     {
         bank++; // banks are negative, ROM_0 is actually -1, so bump
-                // this up so it's aligned with the real hardware
+        // this up so it's aligned with the real hardware
         mpcl_ram = abs(bank) & 0x7f;
         mpcl_rom = abs(bank) & 0x7f; // ram bit 7 low with this mask
-    } else
+    }
+    else
     {
         mpcl_rom = (bank | 0x80);
         mpcl_ram = (bank | 0x80);   // ram bit high
@@ -35,7 +36,8 @@ char bcbuf[BCSZ];
 void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
 {
     di();
-    while (cnt > 0) 
+
+    while (cnt > 0)
     {
         swapbank(sbank);
         memcpy(&bcbuf, src, (cnt > BCSZ ? BCSZ : cnt));
@@ -45,5 +47,6 @@ void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
         src += (cnt > BCSZ ? BCSZ : cnt);
         cnt -= BCSZ;
     }
+
     ei();
 }
