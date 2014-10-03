@@ -18,7 +18,8 @@ void swapbank(signed char bank)
 {
     if (bank < 0)
     {
-        bank++;
+        bank++; // banks are negative, ROM_0 is actually -1, so bump
+                // this up so it's aligned with the real hardware
         mpcl_ram = abs(bank) & 0x7f;
         mpcl_rom = abs(bank) & 0x7f; // ram bit 7 low with this mask
     } else

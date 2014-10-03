@@ -7,9 +7,12 @@
 extern zpage;
 long ticks;
 
+mesg_t msg;
+
 void syscall(mesg_t *m)
 {
-    printf("mesg at %x\n\r", m);
+    memcpy(&msg, m, sizeof(msg));
+    printf("mesg type: %x, mp1: %x\n\r",  msg.m_target, msg.mp1);
 }
 
 void isr() 

@@ -1,6 +1,6 @@
 typedef struct
 {
-    int m_type;
+    int m_target;
     int m_source;
 
     int mi1;
