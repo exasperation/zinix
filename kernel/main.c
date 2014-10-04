@@ -1,13 +1,13 @@
 // main.c
 
 #include <stdint.h>
-#include "debug.h"
-#include "trap.h"
-#include "dev.h"
-#include "mm.h"
+#include "kernel/debug.h"
+#include "kernel/trap.h"
+#include "kernel/dev.h"
+#include "kernel/mm.h"
 #include <string.h>
 #include <stdio.h>
-#include "mesg.h"
+#include "msg.h"
 
 void main()
 {

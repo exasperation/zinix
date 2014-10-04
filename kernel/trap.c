@@ -1,9 +1,9 @@
 #include <string.h>
 #include <stdio.h>
-#include "debug.h"
-#include "mm.h"
-#include "mesg.h"
-#include "trap.h"
+#include "kernel/debug.h"
+#include "kernel/mm.h"
+#include "msg.h"
+#include "kernel/trap.h"
 
 int tr_af;
 int tr_bc;

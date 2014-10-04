@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "debug.h"
-#include "conf.h"
-#include "z80.h"
+#include "kernel/debug.h"
+#include "kernel/conf.h"
+#include "kernel/z80.h"
 
 __sfr __at MPCL_RAM mpcl_ram;
 __sfr __at MPCL_ROM mpcl_rom;
