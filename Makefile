@@ -25,7 +25,10 @@ boot:
 	sdcc -mz80 --no-std-crt0 --code-loc 0 -o boot.ihx boot.rel
 	srec_cat boot.ihx -intel -o boot.bin -binary
 
-romimage: 
+usr/_primes:
+	make -C usr
+
+romimage: usr/_primes
 	dd if=/dev/zero of=romimage bs=1k count=512
 	dd if=romwbw64k.rom of=romimage conv=notrunc
 	dd if=usr/_primes bs=1 seek=64k of=romimage conv=notrunc
@@ -41,3 +44,4 @@ simh: image romimage
 clean:
 	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin image \
 	   	fsimage romimage
+	make -C usr clean

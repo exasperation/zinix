@@ -12,4 +12,4 @@ primes: crt0
 	srec_cat primes.ihx -intel -offset -0x100 -o _primes -binary
 
 clean:
-	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin _*
+	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk _*
