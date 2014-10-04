@@ -28,7 +28,7 @@ boot:
 romimage: 
 	dd if=/dev/zero of=romimage bs=1k count=512
 	dd if=romwbw64k.rom of=romimage conv=notrunc
-	dd if=README.md bs=1 seek=64k of=romimage conv=notrunc
+	dd if=usr/_primes bs=1 seek=64k of=romimage conv=notrunc
 
 image: boot kernel
 	dd if=/dev/zero of=image bs=1k count=1024

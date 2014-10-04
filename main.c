@@ -8,14 +8,17 @@
 #include <string.h>
 #include <stdio.h>
 #include "mesg.h"
-#include "queue.h"
 
 void main()
 {
     printf("starting...\n\r");
-//    enable_intr();
+    bankcpy(RAM_0, 0x100, ROM_2, 0, 0x6000);
+    enable_intr();
 
-    swapbank(ROM_2);
-    hexdump(0, 0x200);
+    __asm
+        jp 0x100
+        __endasm;
+
+
     panic("end of main!");
 }

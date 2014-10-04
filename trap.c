@@ -3,16 +3,34 @@
 #include "debug.h"
 #include "mm.h"
 #include "mesg.h"
+#include "trap.h"
+
+int tr_af;
+int tr_bc;
+int tr_de;
+int tr_hl;
+int tr_ix;
+int tr_iy;
+int tr_af_;
+int tr_bc_;
+int tr_de_;
+int tr_hl_;
+int tr_sp;
+int tr_pc;
 
 extern zpage;
 long ticks;
 
 mesg_t msg;
 
-void syscall(mesg_t *m)
+char *p;
+
+void syscall()
 {
-    memcpy(&msg, m, sizeof(msg));
-    printf("mesg type: %x, mp1: %x\n\r",  msg.dst, msg.mp1);
+//    printf("AF: %4x  BC: %4x  DE: %4x  HL: %4x  IX: %4x  IY: %4x\n\rPC: %4x  SP: %4x\n\r", tr_af, tr_bc, tr_de, tr_hl, tr_ix, tr_iy, tr_pc, tr_sp);
+    p = tr_hl;
+    
+    putchar(*p);
 }
 
 void isr()
