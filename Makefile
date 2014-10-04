@@ -5,7 +5,7 @@ CFLAGS = -mz80 --no-std-crt0 -I./include
 kernel/main.bin:
 	make -C kernel
 
-boot:
+boot/boot.bin:
 	make -C boot
 
 usr/_primes:
@@ -16,7 +16,7 @@ romimage: usr/_primes
 	dd if=simh/romwbw64k.rom of=simh/romimage conv=notrunc
 	dd if=usr/_primes bs=1 seek=64k of=simh/romimage conv=notrunc
 
-image: boot kernel/main.bin
+image: boot/boot.bin kernel/main.bin
 	dd if=/dev/zero of=simh/image bs=1k count=1024
 	dd if=boot/boot.bin of=simh/image conv=notrunc
 	dd if=kernel/main.bin of=simh/image conv=notrunc bs=512 seek=3
