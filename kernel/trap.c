@@ -4,9 +4,14 @@
 #include "kernel/mm.h"
 #include "msg.h"
 #include "kernel/trap.h"
+#include "kernel/proc.h"
 #include <stdint.h>
 
 #define SYS_SEND        1
+
+#define ENOSYS          2
+#define EACCES          3
+#define EINVAL          4
 
 /* temporary registers
  *
@@ -47,12 +52,8 @@ msg_t  *u_msg;
 
 handle_msg()
 {
-    switch (u_msg->op)
-    {
-        case KERNEL_PUTCHAR:
-            putchar(u_msg->mb1);
-            break;
-    }
+    if (u_msg->op == KERNEL_PUTCHAR)
+        putchar(u_msg->mb1);
 }
 
 void syscall()
@@ -61,7 +62,15 @@ void syscall()
         panic("syscall in kernel");
     u_call = (tr_af >> 8 & 0xff);     // syscall is in A
     u_msg = tr_hl;         // pointer to message in userspace
-    // do some verification that the message is valid, etc.
+    
+    /* no imposters allowed */
+    if (u_msg->src != curproc)
+    {
+        u_msg->op = -1;
+        u_msg->errno = EINVAL;
+        printf("pid: %d: EINVAL syscall");
+        return;
+    }
     handle_msg();
 }
 

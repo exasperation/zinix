@@ -9,14 +9,16 @@
 #define     P_RUNNABLE  2
 #define     P_ZOMBIE    3
 
+pid_t curproc;
+
 struct proc
 {
     uint16_t    p_reg[NR_REGS];
     uint16_t    p_sp;
     uint8_t     p_state;
     uint8_t     p_ram_page;   /* which page of RAM is this process? */
-    int16_t     p_pid;
+    pid_t       p_pid;
     int16_t     p_getfrom;
     int16_t     p_nice;
     int16_t     p_priority;
-}
+};

@@ -4,6 +4,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+typedef int16_t     pid_t;
+
 typedef uint16_t	dev_t;		// device type
 
 typedef int32_t     time_t;
