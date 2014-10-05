@@ -21,7 +21,7 @@ image: boot/boot.bin kernel/main.bin
 	dd if=boot/boot.bin of=simh/image conv=notrunc
 	dd if=kernel/main.bin of=simh/image conv=notrunc bs=512 seek=3
 
-simh: image romimage
+simh: all
 	cd simh; simh-altairz80 simh.conf 
 
 clean:

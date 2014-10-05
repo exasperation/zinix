@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "msg.h"
 
 unsigned long i = 0;
 unsigned long x = 0;
@@ -7,15 +8,24 @@ int r;
 
 int isPrime(unsigned long);
 
-char myc;
+msg_t msg;
+msg_t *mptr = &msg;
+
+int send ()
+{
+    __asm
+        ld hl, #_msg
+        ld a, #1
+        rst 0x30
+    __endasm;
+}
 
 void putchar (char c)
 {
-    myc = c;
-    __asm
-        ld hl, #_myc
-        rst 0x30
-    __endasm;
+    msg.op = KERNEL_PUTCHAR;
+    msg.dst = 0;
+    msg.mb1 = c;
+    send();
 }
 
 void primetests (unsigned long number) 
@@ -25,11 +35,8 @@ void primetests (unsigned long number)
         r = isPrime(x);
         if (r)
         {
-            printf("%lu <-- P\r\n", x);
+            printf("%lu\r\n", x);
 
-        } else
-        {
-            printf("%lu\n\r", x);
         }
     }
 }
