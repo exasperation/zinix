@@ -1,9 +1,9 @@
 #include "msg.h"
 
-int send ()
+int send (msg_t *m)
 {
     __asm
-        ld hl, #_msg
+        pop hl
         ld a, #1
         rst 0x30
     __endasm;
