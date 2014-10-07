@@ -3,7 +3,7 @@
 #include "types.h"
 #include <string.h>
 #include <stdio.h>
-#include "kernel/debug.h"
+#include "sys/debug.h"
 
 #define SEC_PER_TRACK 256
 

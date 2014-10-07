@@ -1,10 +1,10 @@
 #include <string.h>
 #include <stdio.h>
-#include "kernel/debug.h"
-#include "kernel/mm.h"
-#include "msg.h"
-#include "kernel/trap.h"
-#include "kernel/proc.h"
+#include "sys/debug.h"
+#include "sys/mm.h"
+#include "sys/message.h"
+#include "sys/trap.h"
+#include "sys/proc.h"
 #include <stdint.h>
 
 #define SYS_SEND        1
@@ -44,7 +44,7 @@ void dump_regs()
     printf("AF: %4x  BC: %4x  DE: %4x  HL: %4x  IX: %4x  IY: %4x\n\rPC: %4x  SP: %4x  AF': %4x  BC': %4x  DE': %4x  HL': %4x\n\r", tr_af, tr_bc, tr_de, tr_hl, tr_ix, tr_iy, tr_pc, tr_sp, tr_af_, tr_bc_, tr_de_, tr_hl_);
 }
 
-int inkernel;
+int insys;
 
 
 uint8_t u_call;
@@ -58,19 +58,19 @@ handle_msg()
 
 void syscall()
 {
-    if (inkernel)
+    if (insys)
         panic("syscall in kernel");
     u_call = (tr_af >> 8 & 0xff);     // syscall is in A
     u_msg = tr_hl;         // pointer to message in userspace
     
     /* no imposters allowed */
-    if (u_msg->src != curproc)
+/*    if (u_msg->src != cp->p_pid)
     {
         u_msg->op = -1;
         u_msg->errno = EINVAL;
         printf("pid: %d: EINVAL syscall");
         return;
-    }
+    } */
     handle_msg();
 }
 

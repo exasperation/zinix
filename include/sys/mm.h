@@ -1,3 +1,5 @@
+#include <string.h>
+
 #define     ROM_0    -1
 #define     ROM_1    -2
 #define     ROM_2    -3
@@ -30,6 +32,10 @@
 #define     RAM_C    12
 #define     RAM_D    13
 #define     RAM_E    14
+
+void mm_init();
+void *kmalloc(size_t sz);
+void kfree(void *a);
 
 void swapbank(signed char bank);
 void bankcpy(char dbank, int dst, char sbank, int src, int cnt);
