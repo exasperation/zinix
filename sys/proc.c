@@ -14,6 +14,11 @@ void init_ptable()
         ptable[i].p_state = P_EMPTY;
 }
 
+void rom_load(char rp, pid_t pid)
+{
+
+}
+
 void init_task(char rompage, char rampage, pid_t pid)
 {
     p_entry *p = find_free();

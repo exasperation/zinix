@@ -1,11 +1,14 @@
 .module crt0
-.globl	_main
 
-init:
-	;; Set stack pointer at top of user memory
-	ld	sp,#0x8000
+.area CRT0   (ABS)
+.globl	     _main
+.org 0x100
+
 	call	_main
 
 _exit:
 1$:
 	jr	1$
+
+.area TEXT (REL,CON)
+.area DATA (REL,CON)

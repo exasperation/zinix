@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string.h>
 
 #define     ROM_0    -1
@@ -32,6 +34,15 @@
 #define     RAM_C    12
 #define     RAM_D    13
 #define     RAM_E    14
+
+/* a value in case we want any free page for acquire_page */
+
+#define     FREE_PAGE 100
+
+/* attempt to acquire page p (perhaps FREE_PAGE), returns 
+ * p if success, -1 if unable to acquire */
+int acquire_page(char p);
+int release_page(char p);
 
 void mm_init();
 void *kmalloc(size_t sz);

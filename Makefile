@@ -14,7 +14,7 @@ usr/_primes:
 romimage: usr/_primes
 	dd if=/dev/zero of=simh/romimage bs=1k count=512
 	dd if=simh/romwbw64k.rom of=simh/romimage conv=notrunc
-	dd if=usr/_primes bs=1 seek=64k of=simh/romimage conv=notrunc
+	dd if=usr/primes.bin bs=1 seek=64k of=simh/romimage conv=notrunc
 
 image: boot/boot.bin sys/main.bin
 	dd if=/dev/zero of=simh/image bs=1k count=1024

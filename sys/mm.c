@@ -9,6 +9,7 @@
 #include "sys/z80.h"
 #include "types.h"
 #include "bitmap.h"
+#include "sys/mm.h"
 
 #define CHUNK_SIZE          0x80   // 128 bytes (power of 2)
 #define HEAP_BASE           0x8000  // to 0x9000
@@ -18,10 +19,57 @@
 /* the restriction on power of two's is so the bitmap size is
  * simplified */
 
+/* 16 RAM pages: can be acquired or freed here. */
+
+char pagebitmap[2];     // 16 entries, top one is set by mm_init
+
+int acquire_page(char p)
+{
+    int i;
+    /* settle for the first free page */
+    if (p == FREE_PAGE)
+    {
+        for (i = 0; i < RAM_D; i++)
+        {
+            if (tstb(pagebitmap, i))
+                continue;
+            setb(pagebitmap, i);
+            return i;
+        }
+        return -1;      /* no free pages! */
+    }
+    /* let's see if the requested page is free */
+    if(tstb(pagebitmap, p))
+        return -1;
+    else
+    {
+        setb(pagebitmap, p);
+        return p;
+    }
+}
+ 
+int release_page(char p)
+{
+    if (!tstb(pagebitmap, p))
+    {
+        //panic("released free page"); // should we panic?
+        return -1;
+    }
+    else
+    {
+        clrb(pagebitmap, p);
+        return p;
+    }
+}
+
+
+/* a bitmap of CHUNKS for the heap area, free or not? */
 char heapbitmap[CHUNK_COUNT/8];
 
 void mm_init()
 {
+    setb(pagebitmap, 0xf); // top page is the upper half 
+                          // of the address space
 }
 
 void *kmalloc (size_t sz)

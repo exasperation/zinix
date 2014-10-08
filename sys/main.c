@@ -18,13 +18,8 @@ void main()
     mm_init();
     init_ptable();
 
-    bankcpy(RAM_0, 0x100, ROM_2, 0, 0x4000);
-
-    hexdump(0, 0x200);
-
-    __asm
-        jp 0x100
-    __endasm;
+    acquire_page(RAM_0);
+    acquire_page(RAM_0);
 
     panic("end of main!");
 }
