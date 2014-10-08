@@ -17,4 +17,6 @@ typedef struct
 
     long ml1;
     long ml2;
+
+    int errno;
 } msg_t;

@@ -1,4 +1,4 @@
-#include "msg.h"
+#include "message.h"
 
 int send (msg_t *m)
 {

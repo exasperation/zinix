@@ -52,6 +52,7 @@ msg_t  *u_msg;
 
 handle_msg()
 {
+    putchar('x');
     if (u_msg->op == KERNEL_PUTCHAR)
         putchar(u_msg->mb1);
 }

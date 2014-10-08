@@ -1,7 +1,6 @@
 #define     RAMSIZE     256 * 1024
 
-#define     NRTASK      3
-#define     NRPROC      9
+#define     NRTASK      14
 
 
 /* IO */

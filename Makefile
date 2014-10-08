@@ -24,7 +24,7 @@ image: boot/boot.bin sys/main.bin
 mkfs:
 	make -C tools
 
-simh: all
+simh: all sys/main.bin
 	cd simh; simh-altairz80 simh.conf 
 
 clean:

@@ -1,18 +1,24 @@
+#pragma     once
+
 #include "types.h"
+#include "sys/conf.h"
 
 /* p_reg contains: af bc de hl ix iy af' bc' de' hl' sp pc
    in that order. */
-#define NR_REGS 10
+#define NR_REGS 12
 
 #define     P_EMPTY     0
-#define     P_BLOCK     1
-#define     P_RUNNABLE  2
-#define     P_ZOMBIE    3
+#define     P_SWAPPED   1
+#define     P_DISK      2
+#define     P_TTY       3
+#define     P_WAIT      4
+#define     P_RECV      5
+#define     P_RUNNABLE  6
+#define     P_ZOMBIE    7
 
-void init_task(char rompage, char rampage, int8_t p);
-struct p_entry *find_free();
+#define     P_MAX_PRIORITY  0x7f
 
-struct p_entry
+typedef struct
 {
     uint16_t    p_reg[NR_REGS];
     uint8_t     p_state;
@@ -21,5 +27,8 @@ struct p_entry
     int16_t     p_getfrom;
     int16_t     p_nice;
     int16_t     p_priority;
-};
+} p_entry;
 
+void init_task(char rompage, char rampage, pid_t pid);
+void init_ptable();
+void schedule();

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "msg.h"
+#include "message.h"
 #include "usys.h"
 
 unsigned long i = 0;

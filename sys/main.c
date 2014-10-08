@@ -10,17 +10,21 @@
 #include <stdio.h>
 #include "sys/message.h"
 
-int i;
-
-struct p_entry *fpe;
-
 void main()
 {
     printf("starting...\n\r");
+
     enable_intr();
     mm_init();
-    for(i = 0; i < 1000; i++)
-        printf("%d - %x\r\n", i, kmalloc(sizeof(int)));
+    init_ptable();
+
+    bankcpy(RAM_0, 0x100, ROM_2, 0, 0x4000);
+
+    hexdump(0, 0x200);
+
+    __asm
+        jp 0x100
+    __endasm;
 
     panic("end of main!");
 }

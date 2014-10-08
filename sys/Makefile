@@ -14,7 +14,7 @@ kernel:
 	sdcc $(CFLAGS) -c proc.c
 	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o main.ihx \
 		entry.rel isr.rel main.rel debug.rel sm.rel zpage.rel \
-		sr.rel trap.rel mm.rel dev.rel
+		sr.rel trap.rel mm.rel dev.rel proc.rel
 	srec_cat main.ihx -intel -offset -0x9000 -o main.bin -binary
 
 clean:
