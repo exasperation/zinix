@@ -29,6 +29,7 @@ typedef struct
     int16_t     p_priority;
 } p_entry;
 
+void rom_loadtask(char rp, pid_t pid);
 void init_task(char rompage, char rampage, pid_t pid);
 void init_ptable();
 void schedule();

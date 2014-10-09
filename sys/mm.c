@@ -11,7 +11,7 @@
 #include "bitmap.h"
 #include "sys/mm.h"
 
-#define CHUNK_SIZE          0x80   // 128 bytes (power of 2)
+#define CHUNK_SIZE          0x40    // 64 bytes (power of 2)
 #define HEAP_BASE           0x8000  // to 0x9000
 #define HEAP_SIZE           0x1000  // bytes (power of 2)
 #define CHUNK_COUNT         ((HEAP_SIZE / CHUNK_SIZE))
@@ -19,10 +19,13 @@
 /* the restriction on power of two's is so the bitmap size is
  * simplified */
 
-/* 16 RAM pages: can be acquired or freed here. */
+/* 16 RAM pages.  Bitmap for busy/free.  0xf is set by mm_init
+ * as the last page isn't available due to hardware limits */
+char pagebitmap[2]; 
 
-char pagebitmap[2];     // 16 entries, top one is set by mm_init
-
+/* acquire a given page by number, or the first free page with
+ * acquire_page(FREE_PAGE), return the page number as int, or 
+ * negative with failure */
 int acquire_page(char p)
 {
     int i;
@@ -47,7 +50,8 @@ int acquire_page(char p)
         return p;
     }
 }
- 
+
+/* release a page back to freedom */
 int release_page(char p)
 {
     if (!tstb(pagebitmap, p))
@@ -62,16 +66,21 @@ int release_page(char p)
     }
 }
 
-
-/* a bitmap of CHUNKS for the heap area, free or not? */
+/* a bitmap of CHUNKS for the heap area, free or not */
 char heapbitmap[CHUNK_COUNT/8];
 
+/* called by main, sets up heap, bitmaps, etc. */
 void mm_init()
 {
-    setb(pagebitmap, 0xf); // top page is the upper half 
-                          // of the address space
+    setb(pagebitmap, 0xf); i    // top page is mapped in as the
+                                // upper half of the address space
 }
 
+/* chunk-based allocator of no more (and no less) than CHUNK_SIZE
+ * bytes.  Returns a pointer to the base of the chunk.
+ *
+ * Should probably simply return a NULL ptr instead of panic on
+ * argument errors. */
 void *kmalloc (size_t sz)
 {
     int i;
@@ -89,8 +98,16 @@ void *kmalloc (size_t sz)
     panic ("kmalloc: no free");
 }
 
+/* takes a pointer and frees the chunk it belongs to */
 void kfree(void *a)
 {
+    uint16_t b = (uint16_t) a;
+    b -= HEAP_BASE;
+    b /= CHUNK_SIZE;
+    printf("free: %x", b);
+    if(!tstb(heapbitmap, b))
+        panic("kfree: already free");
+    clrb(heapbitmap, b);
 }
 
 __sfr __at MPCL_RAM mpcl_ram;
@@ -118,6 +135,9 @@ void swapbank(signed char bank)
 
 char bcbuf[BCSZ];
 
+
+/* bankcpy copies across banks.
+ * cnt bytes from src on sbank to dst on dbank */
 void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
 {
     di();

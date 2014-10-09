@@ -12,14 +12,16 @@
 
 void main()
 {
+    int i;
+    int *p;
     printf("starting...\n\r");
 
     enable_intr();
     mm_init();
     init_ptable();
 
-    acquire_page(RAM_0);
-    acquire_page(RAM_0);
+    for (i = 0; i < 16; i++)
+        printf("%x\n\r", acquire_page(FREE_PAGE));
 
     panic("end of main!");
 }
