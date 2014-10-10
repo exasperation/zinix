@@ -20,16 +20,39 @@
 
 typedef struct
 {
-    uint16_t    p_reg[NR_REGS];
-    uint8_t     p_state;
-    uint8_t     p_page;   /* which page of RAM is this process? */
-    pid_t       p_pid;
-    int16_t     p_getfrom;
-    int16_t     p_nice;
-    int16_t     p_priority;
-} p_entry;
+    int r_hl;
+    int r_af;
+    int r_bc;
+    int r_de;
 
-void rom_loadtask(char rp, pid_t pid);
-void init_task(char rompage, char rampage, pid_t pid);
-void init_ptable();
-void schedule();
+    int r_ix;
+    int r_iy;
+    int r_af_;
+    int r_bc_;
+
+    int r_de_;
+    int r_hl_;
+    int r_pc;
+    int r_sp;
+} regs_t;
+
+typedef struct
+{
+    pid_t p_pid;
+    int8_t p_priority;
+    uint8_t p_page;
+    regs_t regs;
+
+    struct proc_t *next;
+    struct proc_t *prev;
+} proc_t;
+
+typedef struct
+{
+    char queueType;
+    int count;
+    proc_t *head;
+    proc_t *tail;
+} procq_t;
+
+void initProcQueues();

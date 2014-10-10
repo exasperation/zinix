@@ -18,10 +18,15 @@ void main()
 
     enable_intr();
     mm_init();
-    init_ptable();
 
-    for (i = 0; i < 16; i++)
-        printf("%x\n\r", acquire_page(FREE_PAGE));
+    bankcpy(RAM_0, 0x100, ROM_2, 0, 0x6000);
+    swapbank(RAM_0);
+
+    hexdump(0x0, 0x200);
+    brk();    
+    __asm
+        jp 0x100
+    __endasm;
 
     panic("end of main!");
 }

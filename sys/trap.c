@@ -19,18 +19,7 @@
  * at the time of an interrupt or syscall
  */
 
-int tr_af;
-int tr_bc;
-int tr_de;
-int tr_hl;
-int tr_ix;
-int tr_iy;
-int tr_af_;
-int tr_bc_;
-int tr_de_;
-int tr_hl_;
-int tr_sp;
-int tr_pc;
+regs_t tr;  // temporary registers
 
 extern zpage;
 long ticks;
@@ -41,36 +30,27 @@ char *p;
 
 void dump_regs()
 {
-    printf("AF: %4x  BC: %4x  DE: %4x  HL: %4x  IX: %4x  IY: %4x\n\rPC: %4x  SP: %4x  AF': %4x  BC': %4x  DE': %4x  HL': %4x\n\r", tr_af, tr_bc, tr_de, tr_hl, tr_ix, tr_iy, tr_pc, tr_sp, tr_af_, tr_bc_, tr_de_, tr_hl_);
+    printf("AF: %4x  BC: %4x  DE: %4x  HL: %4x  IX: %4x  IY: %4x\n\rPC: %4x  SP: %4x  AF': %4x  BC': %4x  DE': %4x  HL': %4x\n\r", tr.r_af, tr.r_bc, tr.r_de, tr.r_hl, tr.r_ix, tr.r_iy, tr.r_pc, tr.r_sp, tr.r_af_, tr.r_bc_, tr.r_de_, tr.r_hl_);
 }
 
 int insys;
-
 
 uint8_t u_call;
 msg_t  *u_msg;
 
 handle_msg()
 {
+    //printf("message @ %04x -- src: %02x, dst: %02x, op, %02x, i1: %04x, b1: %02x\n\r", 
+    //    u_msg, u_msg->src, u_msg->dst, u_msg->op, u_msg->mi1, u_msg->mb1);
     if (u_msg->op == KERNEL_PUTCHAR)
         putchar(u_msg->mb1);
 }
 
 void syscall()
 {
-    if (insys)
-        panic("syscall in kernel");
-    u_call = (tr_af >> 8 & 0xff);     // syscall is in A
-    u_msg = tr_hl;         // pointer to message in userspace
-    
-    /* no imposters allowed */
-/*    if (u_msg->src != cp->p_pid)
-    {
-        u_msg->op = -1;
-        u_msg->errno = EINVAL;
-        printf("pid: %d: EINVAL syscall");
-        return;
-    } */
+    u_call = (tr.r_af >> 8) & 0xff;
+    u_msg = tr.r_hl;
+    //dump_regs();
     handle_msg();
 }
 

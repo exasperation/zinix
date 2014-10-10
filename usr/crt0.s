@@ -4,6 +4,7 @@
 .globl	     _main
 .org 0x100
 
+    ld      sp, #0x8000
 	call	_main
 
 _exit:

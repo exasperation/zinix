@@ -72,7 +72,7 @@ char heapbitmap[CHUNK_COUNT/8];
 /* called by main, sets up heap, bitmaps, etc. */
 void mm_init()
 {
-    setb(pagebitmap, 0xf); i    // top page is mapped in as the
+    setb(pagebitmap, 0xf);      // top page is mapped in as the
                                 // upper half of the address space
 }
 

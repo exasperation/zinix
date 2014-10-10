@@ -9,15 +9,6 @@ int r;
 
 int isPrime(unsigned long);
 
-void putchar (char c)
-{
-    msg.op = KERNEL_PUTCHAR;
-    msg.src = 1;
-    msg.dst = 0;
-    msg.mb1 = c;
-    send(&msg);
-}
-
 void primetests (unsigned long number) 
 {
     for (x = 0; x < number; x++)

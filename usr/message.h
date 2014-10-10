@@ -1,3 +1,5 @@
+#pragma once
+
 #define KERNEL_PUTCHAR       1
 
 typedef struct
