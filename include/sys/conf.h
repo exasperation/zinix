@@ -1,3 +1,6 @@
+#define     MAJOR_VERSION       0
+#define     MINOR_VERSION       1
+
 #define     RAMSIZE     256 * 1024
 
 #define     NRTASK      14

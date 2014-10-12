@@ -32,7 +32,9 @@ _rst30:
         
 _rst38:
         di
+        call save
         call _isr
+        call restore
         ei
         ret
 

@@ -3,17 +3,17 @@
 #include <stdio.h>
 #include <malloc.h>
 
-Queue* queueCreate()
+queue_t* queueCreate()
 {
-    Queue *q;
-    q = malloc(sizeof(Queue));
+    queue_t *q;
+    q = malloc(sizeof(queue_t));
     q->head = NULL;
     return q;
 }
 
-void queuePrint(Queue *q)
+void queuePrint(queue_t *q)
 {
-    Node *c;
+    qnode_t *c;
 
     if (q->head == NULL)
     {
@@ -24,17 +24,17 @@ void queuePrint(Queue *q)
     c = q->head;
     while (c != NULL)
     {
-        printf("%d, ", c->val);
+        printf("%x, ", c->v);
         c = c->next;
     }
     printf("\r\n");
 }
 
-void enqueue(Queue *q, int v)
+void enqueue(queue_t *q, void* p)
 {
-    Node *n, *c;
+    qnode_t *n, *c;
     n = malloc(4);
-    n->val = v;
+    n->v = p;
     n->next = NULL;
     
     if (q->head == NULL)
@@ -51,13 +51,14 @@ void enqueue(Queue *q, int v)
     return;
 }
 
-int dequeue(Queue *q)
+void* dequeue(queue_t *q)
 {
-    Node *n;
+    qnode_t *n;
     if (q->head == NULL)            /* empty queue */
         return NULL;
     n = q->head;
 
     q->head = q->head->next;
-    return n->val;
+    free (n);
+    return n->v;
 }

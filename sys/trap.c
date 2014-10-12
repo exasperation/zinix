@@ -19,7 +19,7 @@
  * at the time of an interrupt or syscall
  */
 
-regs_t tr;  // temporary registers
+regs_t tr;
 
 extern zpage;
 long ticks;
@@ -56,6 +56,7 @@ void syscall()
 
 void isr()
 {
+    schedule();
 }
 
 void enable_intr()

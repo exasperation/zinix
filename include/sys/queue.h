@@ -1,24 +1,24 @@
 #include "debug.h"
 #include <stdio.h>
 
-typedef struct Node
+typedef struct qnode_t
 {
-    struct Node *next;
-    int val;
-} Node;
+    struct qnode_t *next;
+    void* v;
+} qnode_t;
 
-typedef struct Queue
+typedef struct queue_t
 {
     int count;
-    Node *head;
-} Queue;
+    qnode_t *head;
+} queue_t;
 
-Queue* queueCreate();
+queue_t* queueCreate();
 
-void queueDestroy(Queue *q);
-void queueClear(Queue *q);
+void queueDestroy(queue_t *q);
+void queueClear(queue_t *q);
 
-void queuePrint(Queue *q);
+void queuePrint(queue_t *q);
 
-int dequeue(Queue *q);
-void enqueue(Queue *q, int v);
+void* dequeue(queue_t *q);
+void enqueue(queue_t *q, void *v);

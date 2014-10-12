@@ -4,5 +4,5 @@
 int main () 
 {
     for(;;)
-        printf("%20D\n\r", 0, ' ');
+        printf("x\n\r");
 }

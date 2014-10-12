@@ -11,14 +11,27 @@
 #include "sys/message.h"
 #include "sys/queue.h"
 #include <stdlib.h>
+#include "sys/conf.h"
 
 void main()
 {
-    Queue *mq;
-    printf("starting...\n\r");
-    enable_intr();
+    queue_t *q;
+    int j;
+    int i;
+    int x;
+    printf("\n\rZINIX v%d.%d for the N8VEM\n\r\n", 
+            MAJOR_VERSION, MINOR_VERSION);
     mm_init();
     _sdcc_heap_init();
+    initProcQueues();
+
+    bankcpy(RAM_0, 0x100, ROM_2, 0x0, 0x4000);
+    bankcpy(RAM_1, 0x100, ROM_2, 0x0, 0x4000);
+
+    enable_intr();
+
+    hexdump(0, 0x200);
+    swapbank(RAM_0);
 
     panic("end of main!");
 }
