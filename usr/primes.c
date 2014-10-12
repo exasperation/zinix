@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include "message.h"
 #include "usys.h"
+#include <stdio.h>
 
 unsigned long i = 0;
 unsigned long x = 0;

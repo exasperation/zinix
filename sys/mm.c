@@ -66,48 +66,11 @@ int release_page(char p)
     }
 }
 
-/* a bitmap of CHUNKS for the heap area, free or not */
-char heapbitmap[CHUNK_COUNT/8];
-
 /* called by main, sets up heap, bitmaps, etc. */
 void mm_init()
 {
     setb(pagebitmap, 0xf);      // top page is mapped in as the
                                 // upper half of the address space
-}
-
-/* chunk-based allocator of no more (and no less) than CHUNK_SIZE
- * bytes.  Returns a pointer to the base of the chunk.
- *
- * Should probably simply return a NULL ptr instead of panic on
- * argument errors. */
-void *kmalloc (size_t sz)
-{
-    int i;
-    if (sz > CHUNK_SIZE)
-        panic("kmalloc'd larger than chunk size");
-    // find a free block
-    for (i = 0; i < CHUNK_COUNT; i++)
-    {
-        if (!tstb(heapbitmap, i))
-        {
-            setb(heapbitmap, i);
-            return (HEAP_BASE + (i * CHUNK_SIZE));
-        }
-    }
-    panic ("kmalloc: no free");
-}
-
-/* takes a pointer and frees the chunk it belongs to */
-void kfree(void *a)
-{
-    uint16_t b = (uint16_t) a;
-    b -= HEAP_BASE;
-    b /= CHUNK_SIZE;
-    printf("free: %x", b);
-    if(!tstb(heapbitmap, b))
-        panic("kfree: already free");
-    clrb(heapbitmap, b);
 }
 
 __sfr __at MPCL_RAM mpcl_ram;

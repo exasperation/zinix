@@ -11,9 +11,9 @@ int send (msg_t *m)
     __endasm;
 }
 
-void putchar (char c) 
+void putchar (int c) 
 {
     msg.op = KERNEL_PUTCHAR;
-    msg.mb1 = c;
+    msg.mb1 = (char)c;
     send(&msg);
 }

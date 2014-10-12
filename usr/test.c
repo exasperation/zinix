@@ -1,7 +1,8 @@
 #include "usys.h"
+#include <stdio.h>
 
 int main () 
 {
     for(;;)
-        putchar('@');
+        printf("%20D\n\r", 0, ' ');
 }

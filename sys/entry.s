@@ -15,3 +15,15 @@ _exit:
 1$:
 	halt
 	jr	1$
+
+
+.area	_CODE
+.area	_INITIALIZER
+.area   _GSINIT
+.area   _GSFINAL
+
+.area	_DATA
+.area	_INITIALIZED
+.area	_BSEG
+.area   _BSS
+.area   _HEAP

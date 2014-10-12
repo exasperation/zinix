@@ -1,4 +1,4 @@
 #include "message.h"
 
-void putchar(char c);
+void putchar(int c);
 int send(msg_t *m);
