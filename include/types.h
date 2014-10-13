@@ -5,6 +5,7 @@
 #define TYPES_H
 
 typedef int16_t     pid_t;
+typedef uint8_t     page_t;
 
 typedef uint16_t	dev_t;		// device type
 

@@ -3,7 +3,13 @@
 #include "types.h"
 #include "sys/conf.h"
 
-/* p_reg contains: af bc de hl ix iy af' bc' de' hl' sp pc
+#define     RUNNABLE    1
+#define     BLOCKED     2
+#define     RECEIVE     3
+#define     SLEEP       4
+#define     EMPTY       5
+
+/* p_regs contains: af bc de hl ix iy af' bc' de' hl' sp pc
    in that order. */
 #define NR_REGS 12
 
@@ -31,13 +37,12 @@ typedef struct
     int8_t p_priority;
     uint8_t p_page;
     regs_t p_regs;
-    char p_systask;
-
-    struct proc_t *next;
-    struct proc_t *prev;
+    char p_stat;
 } proc_t;
 
-void initProcQueues();
-void save_regs();
-void restore_regs();
+void save_regs(proc_t *p);
+void restore_regs(proc_t *p);
+
+void initproc(pid_t pid, page_t pg, uint16_t pi, ps);
+
 void schedule();

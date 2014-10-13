@@ -3,8 +3,11 @@
 
 #define     RAMSIZE     256 * 1024
 
-#define     NRTASK      14
+#define     NPROC      14
 
+
+/* base of process RAM */
+#define     PBASE     0x100
 
 /* IO */
 

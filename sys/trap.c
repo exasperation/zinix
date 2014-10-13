@@ -21,6 +21,9 @@
 
 regs_t tr;
 
+char inkernel;
+
+
 extern zpage;
 long ticks;
 
@@ -48,15 +51,18 @@ handle_msg()
 
 void syscall()
 {
+    inkernel = 1;
     u_call = (tr.r_af >> 8) & 0xff;
     u_msg = tr.r_hl;
     //dump_regs();
     handle_msg();
+    inkernel = 0;
 }
 
 void isr()
 {
-    schedule();
+    if(!inkernel)
+        schedule();
 }
 
 void enable_intr()

@@ -27,11 +27,12 @@ void main()
 
     bankcpy(RAM_0, 0x100, ROM_2, 0x0, 0x4000);
     bankcpy(RAM_1, 0x100, ROM_2, 0x0, 0x4000);
-
     enable_intr();
 
-    hexdump(0, 0x200);
-    swapbank(RAM_0);
+
+    __asm
+        jp 0x100
+        __endasm;
 
     panic("end of main!");
 }

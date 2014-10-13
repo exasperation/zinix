@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <malloc.h>
 
+proc_t ptable[NPROC];
+
 queue_t *readyq;
 queue_t *recq;
 queue_t *blockedq;
@@ -15,64 +17,87 @@ queue_t *sleepq;
 
 proc_t *curproc;
 
-proc_t *initproc(pid_t);
+proc_t *ptable_slot();
 
-/* called by main, sets up an empty process table */
-void initProcQueues() 
+int nextpid()
 {
-    readyq = queueCreate();
-    recq = queueCreate();
-    blockedq = queueCreate();
-    sleepq = queueCreate();
-    enqueue(readyq, initproc(1));
-    enqueue(readyq, initproc(2));
-    curproc = dequeue(readyq);
-    enqueue(readyq, curproc);
-    dump_proctable();
+    /* next pid */
+    static pid_t npid = 1;
+    /* should check that pid isn't currently in use! */
+    return npid++;
 }
 
-/* sets up a new process, returns a pointer circq proc structure
- * obligation on caller to place on appropriate queue */
-proc_t* initproc(pid_t pid)
+/* set up a new process with given PID
+ * copies memory at pi on page pg into process space */
+void initproc(pid_t pid, 
+        page_t pg, uint16_t pi, uint16_t ps)
 {
     proc_t *tp;
-    tp = malloc(sizeof(proc_t));
-    tp->p_pid = pid;
+    tp = ptable_slot();
     tp->p_page = acquire_page(FREE_PAGE);
-    tp->p_systask = 0;
-    return tp;
+    tp->p_stat = RUNNABLE;
+    bankcpy(tp->p_page, PBASE, pg, pi, ps);
 }
 
-dump_proctable()
+/* find a free ptable slot */
+proc_t* ptable_slot()
 {
+    int i;
+    for (i = 0; i < NPROC; i++)
+        if (ptable[i].p_stat = EMPTY)
+            return &ptable[i];
+    panic("no free ptable slots");
+}
+
+void print_ptable()
+{
+    int i;
     proc_t *p;
-    qnode_t *n;
-    n = readyq->head;
-    while (n != NULL)
+
+    printf("  PID  STAT  PAGE\n");
+    for (i = 0; i < NPROC; i++)
     {
-        p = (proc_t*)n->v;
-        printf("task: proc_t @ %p, bank: %d, pid: %d\n\r", 
-                p, p->p_page, p->p_pid);
-        n = n->next;
+        p = &ptable[i];
+        if (p->p_stat == RUNNABLE)
+        {
+            printf("%5d  ", p->p_pid);
+            switch (p->p_stat)
+            {
+                case RUNNABLE:
+                    printf("R   ");
+                    break;
+                case BLOCKED:
+                    printf("B   ");
+                    break;
+                case RECEIVE:
+                    printf("R   ");
+                    break;
+                case SLEEP:
+                    printf("S   ");
+                    break;
+            }
+            printf("%2d", p->p_page);
+        }
     }
 }
 
-void save_regs()
+void save_regs(proc_t *p)
 {
-    memcpy(&curproc->p_regs, &tr, sizeof(regs_t));
+    memcpy(&p->p_regs, &tr, sizeof(regs_t));
 }
 
-void restore_regs()
+void restore_regs(proc_t *p)
 {
-    memcpy(&tr, &curproc->p_regs, sizeof(regs_t));
+    memcpy(&tr, &p->p_regs, sizeof(regs_t));
 }
 
 void schedule()
 {
-    dump_proctable();
-    save_regs();
-    curproc = (proc_t*) dequeue(readyq);
-    enqueue(readyq, curproc);
-//    swapbank(curproc->p_page);
-    restore_regs();
+    print_ptable();
+}
+
+/* switch process */
+void swtch(proc_t *p)
+{
+    
 }
