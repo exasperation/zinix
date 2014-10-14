@@ -13,26 +13,20 @@
 #include <stdlib.h>
 #include "sys/conf.h"
 
+void _sdcc_heap_init();
+
 void main()
 {
-    queue_t *q;
-    int j;
-    int i;
-    int x;
     printf("\n\rZINIX v%d.%d for the N8VEM\n\r\n", 
             MAJOR_VERSION, MINOR_VERSION);
+
     mm_init();
     _sdcc_heap_init();
-    initProcQueues();
+    ptable_init();
 
-    bankcpy(RAM_0, 0x100, ROM_2, 0x0, 0x4000);
-    bankcpy(RAM_1, 0x100, ROM_2, 0x0, 0x4000);
+    initproc(1, ROM_2, 0, 0x1000);
+    initproc(2, ROM_3, 0, 0x1000);
     enable_intr();
-
-
-    __asm
-        jp 0x100
-        __endasm;
 
     panic("end of main!");
 }

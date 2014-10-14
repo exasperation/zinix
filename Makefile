@@ -8,14 +8,14 @@ sys/sys.bin:
 boot/boot.bin:
 	make -C boot
 
-usr/primes.bin:
+usr/testx.bin:
 	make -C usr
 
-romimage: usr/primes.bin
+romimage: usr/testx.bin usr/testy.bin
 	dd if=/dev/zero of=simh/romimage bs=1k count=512
 	dd if=simh/romwbw64k.rom of=simh/romimage conv=notrunc
-	dd if=usr/primes.bin bs=1 seek=64k of=simh/romimage conv=notrunc
-	dd if=usr/test.bin bs=1 seek=96k of=simh/romimage conv=notrunc
+	dd if=usr/testx.bin bs=1 seek=64k of=simh/romimage conv=notrunc
+	dd if=usr/testy.bin bs=1 seek=96k of=simh/romimage conv=notrunc
 
 image: boot/boot.bin sys/sys.bin
 	dd if=/dev/zero of=simh/image bs=1k count=1024

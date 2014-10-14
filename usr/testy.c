@@ -4,5 +4,5 @@
 int main () 
 {
     for(;;)
-        printf("x\n\r");
+        printf("y");
 }

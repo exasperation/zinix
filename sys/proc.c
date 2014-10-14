@@ -10,12 +10,9 @@
 
 proc_t ptable[NPROC];
 
-queue_t *readyq;
-queue_t *recq;
-queue_t *blockedq;
-queue_t *sleepq;
-
-proc_t *curproc;
+/* a pointer to the current process table entry */
+proc_t *curproc; /* and it's index into the ptable array */
+int curprocidx; 
 
 proc_t *ptable_slot();
 
@@ -27,6 +24,18 @@ int nextpid()
     return npid++;
 }
 
+void ptable_init()
+{
+    int i;
+#ifdef DEBUG
+    printf("proc - ptable init\n\r");
+#endif
+    for (i = 0; i < NPROC; i++)
+    {
+        ptable[i].p_stat = EMPTY;
+    }
+}
+
 /* set up a new process with given PID
  * copies memory at pi on page pg into process space */
 void initproc(pid_t pid, 
@@ -35,7 +44,9 @@ void initproc(pid_t pid,
     proc_t *tp;
     tp = ptable_slot();
     tp->p_page = acquire_page(FREE_PAGE);
+    tp->p_pid = pid;
     tp->p_stat = RUNNABLE;
+    tp->p_regs.r_pc = PBASE;
     bankcpy(tp->p_page, PBASE, pg, pi, ps);
 }
 
@@ -44,22 +55,24 @@ proc_t* ptable_slot()
 {
     int i;
     for (i = 0; i < NPROC; i++)
-        if (ptable[i].p_stat = EMPTY)
+    {
+        if (ptable[i].p_stat == EMPTY)
             return &ptable[i];
+    }
     panic("no free ptable slots");
 }
 
-void print_ptable()
+void ptable_print()
 {
     int i;
     proc_t *p;
 
-    printf("  PID  STAT  PAGE\n");
+    printf("\n\r  PID  STAT  PAGE\n\r");
     for (i = 0; i < NPROC; i++)
     {
-        p = &ptable[i];
-        if (p->p_stat == RUNNABLE)
+        if (ptable[i].p_stat == RUNNABLE)
         {
+            p = &ptable[i];
             printf("%5d  ", p->p_pid);
             switch (p->p_stat)
             {
@@ -75,8 +88,10 @@ void print_ptable()
                 case SLEEP:
                     printf("S   ");
                     break;
+                default:
+                printf("??? ");
             }
-            printf("%2d", p->p_page);
+            printf(" %2d\n\r", p->p_page);
         }
     }
 }
@@ -93,11 +108,31 @@ void restore_regs(proc_t *p)
 
 void schedule()
 {
-    print_ptable();
-}
+    int idx = curprocidx;
+    char looped = 0;
+    proc_t *next;
+    ptable_print();
 
-/* switch process */
-void swtch(proc_t *p)
-{
+    printf("entering scheduler loop\n\r");
+   
+    while (idx <= NPROC) 
+    {
+        if (ptable[idx].p_stat == RUNNABLE)
+        {
+            next = &ptable[idx];
+        }
+        idx++;
+
+        if (idx == NPROC && looped == 0)
+        {
+            idx = 0;
+            looped = 1;
+        }
+    }
     
+    printf("\n\rsched - next proc: %d\n\r", next->p_pid);
+    save_regs(curproc);
+    curproc = next;
+    swapbank(curproc->p_page);
+    restore_regs(curproc);
 }

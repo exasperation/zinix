@@ -1,6 +1,6 @@
 CFLAGS = -mz80 --no-std-crt0 
 
-all: primes crt0 test
+all: primes crt0 testx testy
 
 crt0:
 	sdasz80 -o crt0.s
@@ -12,11 +12,17 @@ primes: crt0
 		crt0.rel primes.rel usys.rel
 	hex2bin primes.ihx
 
-test: crt0
-	sdcc $(CFLAGS) -c test.c
-	sdcc $(CFLAGS) --code-loc 0x100 --data-loc 0x4000 -o test.ihx \
-		crt0.rel test.rel usys.rel
-	hex2bin test.ihx
+testx: crt0
+	sdcc $(CFLAGS) -c testx.c
+	sdcc $(CFLAGS) --code-loc 0x100 --data-loc 0x4000 -o testx.ihx \
+		crt0.rel testx.rel usys.rel
+	hex2bin testx.ihx
+
+testy: crt0
+	sdcc $(CFLAGS) -c testy.c
+	sdcc $(CFLAGS) --code-loc 0x100 --data-loc 0x4000 -o testy.ihx \
+		crt0.rel testy.rel usys.rel
+	hex2bin testy.ihx
 
 clean:
 	-rm *.rel *.ihx *.asm *.sym *.lst *.map *.noi *.lk *.bin

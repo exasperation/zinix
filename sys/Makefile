@@ -16,7 +16,7 @@ kernel:
 	sdcc $(CFLAGS) -c queue.c
 	sdcc $(CFLAGS) --code-loc 0x9010 --data-loc 0xc000 -o sys.ihx \
 		entry.rel isr.rel main.rel debug.rel sm.rel zpage.rel \
-		sr.rel trap.rel mm.rel dev.rel proc.rel queue.rel heap.s
+		sr.rel trap.rel mm.rel dev.rel proc.rel queue.rel heap.rel
 	hex2bin sys.ihx
 clean:
 	-rm *.rel *.ihx *.bin *.sym *.lk *.lst *.asm *.map *.noi

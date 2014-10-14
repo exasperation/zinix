@@ -43,6 +43,9 @@ typedef struct
 void save_regs(proc_t *p);
 void restore_regs(proc_t *p);
 
-void initproc(pid_t pid, page_t pg, uint16_t pi, ps);
+void ptable_init();
+void ptable_print();
+
+void initproc(pid_t pid, page_t pg, uint16_t pi, uint16_t ps);
 
 void schedule();
