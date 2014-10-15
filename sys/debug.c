@@ -1,5 +1,4 @@
-#include "sys/debug.h"
-#include <stdio.h>
+#include "sys/kernel.h"
 
 __sfr __at 0x68 UART0;
 

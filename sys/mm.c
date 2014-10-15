@@ -1,16 +1,8 @@
 /* mm.c - Memory Management for the N8VEM
  *
  * see memmgr.asm in RomWBW source and docs/MCPL_V2 */
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include "sys/debug.h"
-#include "sys/conf.h"
-#include "sys/z80.h"
-#include "types.h"
-#include "bitmap.h"
-#include "sys/mm.h"
-#include "sys/trap.h"
+
+#include "sys/kernel.h"
 
 #define CHUNK_SIZE          0x40    // 64 bytes (power of 2)
 #define HEAP_BASE           0x8000  // to 0x9000

@@ -1,9 +1,6 @@
-/* bio.c - block IO hardware */
+/* sm.c - SIMH HDSK driver */
 
-#include "types.h"
-#include <string.h>
-#include <stdio.h>
-#include "sys/debug.h"
+#include "sys/kernel.h"
 
 #define SEC_PER_TRACK 256
 

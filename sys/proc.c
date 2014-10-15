@@ -1,12 +1,4 @@
-#include "sys/debug.h"
-#include "sys/proc.h"
-#include "sys/conf.h"
-#include "sys/mm.h"
-#include "sys/ef.h"
-#include "sys/queue.h"
-#include "sys/trap.h"
-#include <stdio.h>
-#include <malloc.h>
+#include "sys/kernel.h"
 
 proc_t ptable[NPROC];
 
@@ -118,18 +110,6 @@ int last;
 void schedule()
 {
     save_regs(curproc);
-
-    switch (last)
-    {
-        case 0:
-            last = 1;
-            curproc = &ptable[1];
-            break;
-        case 1:
-            last = 0;
-            curproc = &ptable[0];
-            break;
-    }   
 
     printf("\n\rschedule - next proc is %d (%p) on page %d\n\r",
             curproc->p_pid, curproc, curproc->p_page);

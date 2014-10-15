@@ -1,6 +1,4 @@
-#include "sys/conf.h"
-#include "sys/dev.h"
-#include "sys/debug.h"
+#include "sys/kernel.h"
 
 int d_read(dev_t d, char *b, long blk)
 {

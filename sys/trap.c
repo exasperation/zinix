@@ -1,12 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-#include "sys/debug.h"
-#include "sys/mm.h"
-#include "sys/message.h"
-#include "sys/trap.h"
-#include "sys/proc.h"
-#include "sys/z80.h"
-#include <stdint.h>
+#include "sys/kernel.h"
 
 #define SYS_SEND        1
 

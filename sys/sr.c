@@ -1,4 +1,4 @@
-#include "sys/dev.h"
+#include "sys/kernel.h"
 
 #define UART0_BASE 0x68
 #define UART0_LSR  UART0_BASE + 5
