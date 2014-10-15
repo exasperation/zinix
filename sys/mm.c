@@ -10,6 +10,7 @@
 #include "types.h"
 #include "bitmap.h"
 #include "sys/mm.h"
+#include "sys/trap.h"
 
 #define CHUNK_SIZE          0x40    // 64 bytes (power of 2)
 #define HEAP_BASE           0x8000  // to 0x9000
@@ -94,19 +95,23 @@ void swapbank(signed char bank)
         mpcl_ram = (bank | 0x80);   // ram bit high
     }
 }
-#define BCSZ    256
+#define BCSZ    128
 
 char bcbuf[BCSZ];
 
 
 /* bankcpy copies across banks.
  * cnt bytes from src on sbank to dst on dbank */
-void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
+void bankcpy(char dbank, uint16_t dst, char sbank, uint16_t src, int cnt)
 {
     di();
 
     while (cnt > 0)
     {
+#ifdef DEBUG_PRINT
+        printf("bankcpy - sbank %d @ %p, dbank %d @ %p, cnt remaining: %d\n\r",
+                sbank, src, dbank, dst, cnt);
+#endif
         swapbank(sbank);
         memcpy(&bcbuf, src, (cnt > BCSZ ? BCSZ : cnt));
         swapbank(dbank);
@@ -115,6 +120,8 @@ void bankcpy(char dbank, int dst, char sbank, int src, int cnt)
         src += (cnt > BCSZ ? BCSZ : cnt);
         cnt -= BCSZ;
     }
-
-    ei();
+    if (intr)
+    {
+        ei();
+    }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include <string.h>
 
 #define     ROM_0    -1
@@ -49,4 +50,4 @@ void *kmalloc(size_t sz);
 void kfree(void *a);
 
 void swapbank(signed char bank);
-void bankcpy(char dbank, int dst, char sbank, int src, int cnt);
+void bankcpy(char dbank, uint16_t dst, char sbank, uint16_t src, int cnt);

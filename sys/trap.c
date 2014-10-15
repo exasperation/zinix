@@ -5,6 +5,7 @@
 #include "sys/message.h"
 #include "sys/trap.h"
 #include "sys/proc.h"
+#include "sys/z80.h"
 #include <stdint.h>
 
 #define SYS_SEND        1
@@ -22,7 +23,8 @@
 regs_t tr;
 
 char inkernel;
-
+/* are interrupts on?*/
+char intr;
 
 extern zpage;
 long ticks;
@@ -77,8 +79,13 @@ void enable_intr()
     }
 
     swapbank(RAM_0);
+    
     __asm
     im 1
-    ei
     __endasm;
+
+    if (intr)
+    {
+        ei();
+    }
 }

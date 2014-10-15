@@ -27,13 +27,14 @@ int nextpid()
 void ptable_init()
 {
     int i;
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
     printf("proc - ptable init\n\r");
 #endif
     for (i = 0; i < NPROC; i++)
     {
         ptable[i].p_stat = EMPTY;
     }
+    ptable_print();
 }
 
 /* set up a new process with given PID
@@ -47,7 +48,10 @@ void initproc(pid_t pid,
     tp->p_pid = pid;
     tp->p_stat = RUNNABLE;
     tp->p_regs.r_pc = PBASE;
-    bankcpy(tp->p_page, PBASE, pg, pi, ps);
+    bankcpy(tp->p_page, 0x100, pg, pi, ps);
+#ifdef DEBUG_PRINT
+    printf("proc - initproc - pid: %d\r\n", pid);
+#endif
 }
 
 /* find a free ptable slot */
@@ -57,7 +61,13 @@ proc_t* ptable_slot()
     for (i = 0; i < NPROC; i++)
     {
         if (ptable[i].p_stat == EMPTY)
+        {
+#ifdef DEBUG_PRINT
+            printf("proc - ptable_slot: free slot %d @ %p\n\r",
+                    i, &ptable[i]);
+#endif
             return &ptable[i];
+        }
     }
     panic("no free ptable slots");
 }
@@ -70,29 +80,26 @@ void ptable_print()
     printf("\n\r  PID  STAT  PAGE\n\r");
     for (i = 0; i < NPROC; i++)
     {
-        if (ptable[i].p_stat == RUNNABLE)
+        p = &ptable[i];
+        printf("%5d  ", p->p_pid);
+        switch (p->p_stat)
         {
-            p = &ptable[i];
-            printf("%5d  ", p->p_pid);
-            switch (p->p_stat)
-            {
-                case RUNNABLE:
-                    printf("R   ");
-                    break;
-                case BLOCKED:
-                    printf("B   ");
-                    break;
-                case RECEIVE:
-                    printf("R   ");
-                    break;
-                case SLEEP:
-                    printf("S   ");
-                    break;
-                default:
-                printf("??? ");
-            }
-            printf(" %2d\n\r", p->p_page);
+            case RUNNABLE:
+                printf("R   ");
+                break;
+            case BLOCKED:
+                printf("B   ");
+                break;
+            case RECEIVE:
+                printf("R   ");
+                break;
+            case SLEEP:
+                printf("S   ");
+                break;
+            default:
+            printf("??? ");
         }
+        printf(" %2d\n\r", p->p_page);
     }
 }
 
@@ -106,33 +113,27 @@ void restore_regs(proc_t *p)
     memcpy(&tr, &p->p_regs, sizeof(regs_t));
 }
 
+int last;
+
 void schedule()
 {
-    int idx = curprocidx;
-    char looped = 0;
-    proc_t *next;
-    ptable_print();
-
-    printf("entering scheduler loop\n\r");
-   
-    while (idx <= NPROC) 
-    {
-        if (ptable[idx].p_stat == RUNNABLE)
-        {
-            next = &ptable[idx];
-        }
-        idx++;
-
-        if (idx == NPROC && looped == 0)
-        {
-            idx = 0;
-            looped = 1;
-        }
-    }
-    
-    printf("\n\rsched - next proc: %d\n\r", next->p_pid);
     save_regs(curproc);
-    curproc = next;
+
+    switch (last)
+    {
+        case 0:
+            last = 1;
+            curproc = &ptable[1];
+            break;
+        case 1:
+            last = 0;
+            curproc = &ptable[0];
+            break;
+    }   
+
+    printf("\n\rschedule - next proc is %d (%p) on page %d\n\r",
+            curproc->p_pid, curproc, curproc->p_page);
+
     swapbank(curproc->p_page);
     restore_regs(curproc);
 }

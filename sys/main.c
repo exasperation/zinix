@@ -19,14 +19,16 @@ void main()
 {
     printf("\n\rZINIX v%d.%d for the N8VEM\n\r\n", 
             MAJOR_VERSION, MINOR_VERSION);
-
     mm_init();
-    _sdcc_heap_init();
     ptable_init();
 
     initproc(1, ROM_2, 0, 0x1000);
     initproc(2, ROM_3, 0, 0x1000);
+
+    intr = 1;
     enable_intr();
+
+    for (;;);
 
     panic("end of main!");
 }
