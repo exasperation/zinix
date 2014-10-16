@@ -12,10 +12,10 @@ void main()
     ptable_init();
 
     initproc(1, ROM_2, 0, 0x1000);
-    initproc(2, ROM_3, 0, 0x1000);
 
     intr = 1;
     enable_intr();
+    swtch(1);
 
     for (;;);
 

@@ -87,7 +87,7 @@ void swapbank(signed char bank)
         mpcl_ram = (bank | 0x80);   // ram bit high
     }
 }
-#define BCSZ    128
+#define BCSZ    2048
 
 char bcbuf[BCSZ];
 

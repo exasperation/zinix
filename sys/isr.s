@@ -22,6 +22,10 @@ _rst10:
 _rst18:
 _rst20:
 _rst28:
+        di
+        call restore
+        ei
+        ret
 _rst30:
         di
         call save

@@ -10,6 +10,7 @@
 
 /* base of process RAM */
 #define     PBASE     0x100
+#define     PTOP        0x8000
 
 /* IO */
 

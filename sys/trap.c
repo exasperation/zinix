@@ -30,12 +30,10 @@ void dump_regs()
     printf("AF: %4x  BC: %4x  DE: %4x  HL: %4x  IX: %4x  IY: %4x\n\rPC: %4x  SP: %4x  AF': %4x  BC': %4x  DE': %4x  HL': %4x\n\r", tr.r_af, tr.r_bc, tr.r_de, tr.r_hl, tr.r_ix, tr.r_iy, tr.r_pc, tr.r_sp, tr.r_af_, tr.r_bc_, tr.r_de_, tr.r_hl_);
 }
 
-int insys;
-
 uint8_t u_call;
 msg_t  *u_msg;
 
-handle_msg()
+void handle_msg()
 {
     //printf("message @ %04x -- src: %02x, dst: %02x, op, %02x, i1: %04x, b1: %02x\n\r", 
     //    u_msg, u_msg->src, u_msg->dst, u_msg->op, u_msg->mi1, u_msg->mb1);
@@ -55,8 +53,12 @@ void syscall()
 
 void isr()
 {
-    if(!inkernel)
+    if(inkernel == 0)
+    {
+        dump_regs();
         schedule();
+        dump_regs();
+    }
 }
 
 void enable_intr()
@@ -71,10 +73,8 @@ void enable_intr()
     }
 
     swapbank(RAM_0);
-    
-    __asm
-    im 1
-    __endasm;
+
+    __asm__("im 1");    
 
     if (intr)
     {

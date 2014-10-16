@@ -40,6 +40,9 @@ typedef struct
     char p_stat;
 } proc_t;
 
+void swtch(pid_t pid);
+
+
 void save_regs(proc_t *p);
 void restore_regs(proc_t *p);
 

@@ -1,9 +1,13 @@
+#pragma once
+
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "sys/conf.h"
+
+#include "sys/global.h"
 
 #include "sys/debug.h"
 #include "sys/proc.h"
