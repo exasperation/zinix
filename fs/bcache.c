@@ -1,11 +1,11 @@
 /* This file incorporates code from xv6, a project
  * of MIT and copyright under the MIT licence. */
 
-#include "bcache.h"
-#include "debug.h"
-#include "bio.h"
+#include "fs/bcache.h"
+#include "fs/debug.h"
+#include "fs/fs.h"
 
-__at 0x4000 struct
+struct
 {
     struct buf buf[NBUF];
 
@@ -120,14 +120,14 @@ void bcache_rw(struct buf *b)
 
     if(b->flags & B_DIRTY)
     {
-        bio_rw(b->data, b->dev, BIO_WRITE, b->block);
+        //bio_rw(b->data, b->dev, BIO_WRITE, b->block);
         b->flags &= ~B_DIRTY;
         b->flags |= B_VALID;
     }
 
     if (!(b->flags & B_VALID))
     {
-        bio_rw(b->data, b->dev, BIO_READ, b->block);
+        //bio_rw(b->data, b->dev, BIO_READ, b->block);
         b->flags |= B_VALID;
     }
 }

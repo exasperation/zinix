@@ -8,13 +8,13 @@ crt0:
 primes: crt0
 	sdcc $(CFLAGS) -c primes.c
 	sdcc $(CFLAGS) -c usys.c
-	sdcc $(CFLAGS) --code-loc 0x100 --data-loc 0x4000 -o primes.ihx \
+	sdcc $(CFLAGS) --code-loc 0x120 --data-loc 0x4000 -o primes.ihx \
 		crt0.rel primes.rel usys.rel
 	hex2bin primes.ihx
 
 testx: crt0
 	sdcc $(CFLAGS) -c testx.c
-	sdcc $(CFLAGS) --code-loc 0x100 --data-loc 0x4000 -o testx.ihx \
+	sdcc $(CFLAGS) --code-loc 0x120 --data-loc 0x4000 -o testx.ihx \
 		crt0.rel testx.rel usys.rel
 	hex2bin testx.ihx
 

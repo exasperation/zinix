@@ -1,5 +1,6 @@
+#pragma once
+
 #include <stdint.h>
-#include "types.h"
 
 #define BLOCKSIZE	1024
 #define NR_SUPERS	4
@@ -11,6 +12,10 @@
 #define STAT_DIRTY  2
 
 #define BPERINODE   10
+
+/* functions pointed to from main */
+
+void putchar (char c);
 
 struct superblock
 {

@@ -4,6 +4,8 @@
 
 void _sdcc_heap_init();
 
+void (*fsmain)( void (*)(char) );
+
 void main()
 {
     printf("\n\rZINIX v%d.%d for the N8VEM\n\r\n", 
@@ -13,9 +15,13 @@ void main()
     intr = 1;
     enable_intr();
 
-    initproc(1, ROM_2, 0, 0x7500);
+    bankcpy(RAM_0, 0x100, ROM_2, 0, 0x4000); 
 
-    __asm__("jp 0x100");
+    printf("%p\n\r", &putchar);
+
+    fsmain = (void*) 0x100;
+
+    fsmain(&putchar);
 
     panic("end of main!");
 }
