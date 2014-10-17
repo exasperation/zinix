@@ -5,8 +5,6 @@
 
 	.org	0x100
 	
-    ld	sp,#0x8000
-
     ;; Initialise global variables
     jp      _main
 	jp	    _exit

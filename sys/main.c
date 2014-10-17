@@ -17,8 +17,6 @@ void main()
 
     bankcpy(RAM_0, 0x100, ROM_2, 0, 0x4000); 
 
-    printf("%p\n\r", &putchar);
-
     fsmain = (void*) 0x100;
 
     fsmain(&putchar);
