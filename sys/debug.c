@@ -1,28 +1,18 @@
 #include "sys/kernel.h"
 
-__sfr __at 0x68 UART0;
+__sfr __at UART0_TRB uart0_trb;
+__sfr __at UART0_LSR uart0_lsr;
 
 void putchar(char c)
 {
-    UART0 = c;
-    /*	__asm
-    		ld hl, #2
-    		add hl, sp
-    		ld e, (hl)
-    		ld b, #01
-    		ld c, #0
-    		rst 08
-    	__endasm; */
+    while (!(uart0_lsr & 0x20));
+    uart0_trb = c;
 }
 
 char getchar()
 {
-    __asm
-    ld b, #0
-    ld c, #0
-    rst 08
-    ld l, e
-    __endasm;
+    while (! (uart0_lsr & 0x01));
+    return uart0_trb;
 }
 
 void _panic(char *s, char *fn, int ln)

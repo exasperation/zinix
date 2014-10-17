@@ -10,14 +10,12 @@ void main()
             MAJOR_VERSION, MINOR_VERSION);
     mm_init();
     ptable_init();
-
-    initproc(1, ROM_2, 0, 0x1000);
-
     intr = 1;
     enable_intr();
-    swtch(1);
 
-    for (;;);
+    initproc(1, ROM_2, 0, 0x7500);
+
+    __asm__("jp 0x100");
 
     panic("end of main!");
 }

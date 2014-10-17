@@ -4,6 +4,13 @@
 #define BLOCKSIZE	1024
 #define NR_SUPERS	4
 #define SB_MAGIC    0xDEAD
+#define FS_VERSION  1
+#define MMAX_DEFAULT 35
+
+#define STAT_CLEAN  1
+#define STAT_DIRTY  2
+
+#define BPERINODE   10
 
 struct superblock
 {

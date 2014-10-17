@@ -40,14 +40,6 @@ proc_t *pidlookup(pid_t p)
     }
 }
 
-void swtch(pid_t pid)
-{
-    proc_t *p = pidlookup(pid);
-    restore_regs(p);
-    curproc = p;
-    __asm__("rst 0x28");
-}
-
 /* set up a new process with given PID
  * copies memory at pi on page pg into process space */
 void initproc(pid_t pid, 
@@ -65,6 +57,8 @@ void initproc(pid_t pid,
 #ifdef DEBUG_PRINT
     printf("proc - initproc - pid: %d\r\n", pid);
 #endif
+    restore_regs(curproc);
+    __asm__("jp 0x100");
 }
 
 /* find a free ptable slot */
@@ -127,13 +121,8 @@ void restore_regs(proc_t *p)
     memcpy(&tr, &(p->p_regs), sizeof(regs_t));
 }
 
-int last;
-
 void schedule()
 {
-    save_regs(curproc);
-    ptable_print();
-    dump_regs();
 }
 
 /*
