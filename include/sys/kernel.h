@@ -14,6 +14,7 @@
 #include "sys/z80.h"
 #include "sys/dev.h"
 #include "sys/usys.h"
+#include "sys/kmod.h"
 
 #include "types.h"
 #include "bitmap.h"

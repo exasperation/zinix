@@ -3,6 +3,7 @@
 #include "types.h"
 #include "fs/debug.h"
 #include "fs/fs.h"
+#include "sys/kmod.h"
 
 /*__sfr __at 0x68 uart0_trb; 
  
@@ -11,17 +12,15 @@ void putchar(char c)
     uart0_trb = c;
 }*/
 
-void (*ptchp) (char c);
+kfunc_t *kfunc;
 
 void putchar (char c)
 {
-    (*ptchp)(c);
+    kfunc->putchar(c);
 }
 
-void main ( void (*putcharptr) (char) )
+void main (kfunc_t* kf)
 {
-    ptchp = putcharptr;
-
-    printf("%p, %p\n\r", &putchar, ptchp);
+    kfunc = kf;
     printf("another function\n\r");
 }

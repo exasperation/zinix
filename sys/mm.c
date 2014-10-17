@@ -4,17 +4,12 @@
 
 #include "sys/kernel.h"
 
-#define CHUNK_SIZE          0x40    // 64 bytes (power of 2)
-#define HEAP_BASE           0x8000  // to 0x9000
-#define HEAP_SIZE           0x1000  // bytes (power of 2)
-#define CHUNK_COUNT         ((HEAP_SIZE / CHUNK_SIZE))
-
-/* the restriction on power of two's is so the bitmap size is
- * simplified */
-
 /* 16 RAM pages.  Bitmap for busy/free.  0xf is set by mm_init
  * as the last page isn't available due to hardware limits */
 char pagebitmap[2]; 
+
+/* the page given to the most recent call to swapbank */
+char lastbank = 0;
 
 /* acquire a given page by number, or the first free page with
  * acquire_page(FREE_PAGE), return the page number as int, or 
@@ -74,6 +69,7 @@ __sfr __at MPCL_ROM mpcl_rom;
  */
 void swapbank(signed char bank)
 {
+    lastbank = bank;
     if (bank < 0)
     {
         bank++; // banks are negative, ROM_0 is actually -1, so bump
@@ -87,6 +83,13 @@ void swapbank(signed char bank)
         mpcl_ram = (bank | 0x80);   // ram bit high
     }
 }
+
+/* swap back for quick off-page tasks in kernel */
+void swaplast(void)
+{
+    swapbank(lastbank);
+}
+
 #define BCSZ    2048
 
 char bcbuf[BCSZ];
@@ -116,4 +119,6 @@ void bankcpy(char dbank, uint16_t dst, char sbank, uint16_t src, int cnt)
     {
         ei();
     }
+
+    swaplast();
 }
